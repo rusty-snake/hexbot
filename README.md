@@ -9,13 +9,13 @@ My solution for: https://noopschallenge.com/challenges/hexbot
 
 **cargo, rustc, pkg-config, openssl**
 
-| Distro                   | command(s)                                                                        |
-| ------------------------ | --------------------------------------------------------------------------------- |
-| Arch Linux               | `sudo pacman -S rust openssl pkg-config`                                          |
-| Debian 9                 | `sudo apt install pkg-config libssl-dev`<br>`curl https://sh.rustup.rs -sSf | sh` |
-| Debian 10+, Ubuntu, Mint | `sudo apt install cargo pkg-config libssl-dev`                                    |
-| Fedora                   | `sudo dnf install cargo openssl-devel pkg-config`                                 |
-| OpenSUSE                 | `sudo zypper install cargo openssl-devel pkg-config`                              |
+| Distro                   | command(s)                                                                         |
+| ------------------------ | ---------------------------------------------------------------------------------- |
+| Arch Linux               | `sudo pacman -S rust openssl pkg-config`                                           |
+| Debian 9                 | `sudo apt install pkg-config libssl-dev`<br>`curl https://sh.rustup.rs -sSf \| sh` |
+| Debian 10+, Ubuntu, Mint | `sudo apt install cargo pkg-config libssl-dev`                                     |
+| Fedora                   | `sudo dnf install cargo openssl-devel pkg-config`                                  |
+| OpenSUSE                 | `sudo zypper install cargo openssl-devel pkg-config`                               |
 
 ### Get the source code
 
