@@ -1,4 +1,4 @@
-# [HEXBOT](https://noopschallenge.com/challenges/hexbot)
+# Hexbot :construction:
 
 My solution for: https://noopschallenge.com/challenges/hexbot
 
