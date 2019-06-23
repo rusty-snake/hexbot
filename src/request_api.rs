@@ -18,6 +18,7 @@
  */
 
 use serde::Deserialize;
+use std::fmt;
 
 #[derive(Clone, Debug, Deserialize, Eq, Hash, PartialEq, Ord, PartialOrd)]
 struct Color {
@@ -32,6 +33,12 @@ pub struct Hexbot {
 impl Hexbot {
     pub fn get_color(&self) -> &str {
         &self.colors[0].value
+    }
+}
+
+impl fmt::Display for Hexbot {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.colors[0].value)
     }
 }
 
