@@ -29,6 +29,12 @@ pub struct Hexbot {
     colors: [Color; 1],
 }
 
+impl Hexbot {
+    pub fn get_color(&self) -> &str {
+        &self.colors[0].value
+    }
+}
+
 pub fn get_hexbot() -> Result<Hexbot, reqwest::Error> {
     Ok(reqwest::get("https://api.noopschallenge.com/hexbot")?.json::<Hexbot>()?)
 }

@@ -21,5 +21,6 @@ mod request_api;
 
 fn main() {
     let hexbot = request_api::get_hexbot().unwrap();
+    dbg!(hexbot.get_color());
     dbg!(hexbot);
 }
