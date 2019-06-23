@@ -20,13 +20,13 @@
 use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
-pub struct Color {
-    pub value: String,
+struct Color {
+    value: String,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct Hexbot {
-    pub colors: [Color; 1],
+    colors: [Color; 1],
 }
 
 pub fn get_hexbot() -> Result<Hexbot, reqwest::Error> {
