@@ -19,12 +19,12 @@
 
 use serde::Deserialize;
 
-#[derive(Debug, Deserialize)]
+#[derive(Clone, Debug, Deserialize, Eq, Hash, PartialEq, Ord, PartialOrd)]
 struct Color {
     value: String,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Clone, Debug, Deserialize, Eq, Hash, PartialEq, Ord, PartialOrd)]
 pub struct Hexbot {
     colors: [Color; 1],
 }
