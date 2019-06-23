@@ -320,7 +320,7 @@ dependencies = [
 
 [[package]]
 name = "hexbot"
-version = "0.0.1"
+version = "0.0.2-dev"
 dependencies = [
  "reqwest 0.9.18 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde 1.0.92 (registry+https://github.com/rust-lang/crates.io-index)",
