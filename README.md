@@ -73,7 +73,7 @@ $ cargo run
  - Support for requesting, parsing and printing a hexbot request without parameters.
  - All stuff around a project like README, LICENSE, .gitignore, ...
 
-[0.0.1]: https://github.com/rusty-snake/hexbot/tree/0.0.1
+[0.0.1]: https://github.com/rusty-snake/hexbot/tree/v0.0.1
 ```
 
 For the full Changelog see [CHANGELOG.md](CHANGELOG.md).
