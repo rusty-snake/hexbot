@@ -30,7 +30,7 @@ cd hexbot
 wget -O hexbot.tar.gz https://github.com/rusty-snake/hexbot/archive/master.tar.gz
 # or
 curl -O hexbot.tar.gz https://github.com/rusty-snake/hexbot/archive/master.tar.gz
-tar -xvzf
+tar -xvzf hexbot.tar.gz
 cd hexbot-master
 ```
 
