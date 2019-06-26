@@ -20,17 +20,18 @@
 use serde::Deserialize;
 use std::fmt;
 
-#[derive(Clone, Debug, Deserialize, Eq, Hash, PartialEq, Ord, PartialOrd)]
+#[derive(Clone, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd)]
 struct Color {
     value: String,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, Hash, PartialEq, Ord, PartialOrd)]
+#[derive(Clone, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub struct Hexbot {
     colors: [Color; 1],
 }
 
 impl Hexbot {
+    #[inline]
     pub fn get_color(&self) -> &str {
         &self.colors[0].value
     }
@@ -43,5 +44,5 @@ impl fmt::Display for Hexbot {
 }
 
 pub fn get_hexbot() -> Result<Hexbot, reqwest::Error> {
-    Ok(reqwest::get("https://api.noopschallenge.com/hexbot")?.json::<Hexbot>()?)
+    reqwest::get("https://api.noopschallenge.com/hexbot")?.json::<Hexbot>()
 }

@@ -5,7 +5,6 @@ version = "0.0.2-dev"
 authors = ["rusty-snake <print_hello_world+Public@protonmail.com>"]
 edition = "2018"
 license = "GPL-3.0-or-later"
-repository = "https://github.com/rusty-snake/hexbot"
 
 [dependencies]
 reqwest = "0.9.18"
