@@ -1,5 +1,15 @@
 # Hexbot :construction:
 
+![top language: rust](https://img.shields.io/github/languages/top/rusty-snake/hexbot.svg?label=Rust&logo=rust)
+![license: GPL-3.0](https://img.shields.io/github/license/rusty-snake/hexbot.svg)
+![latest SemVer tag: v0.0.1](https://img.shields.io/github/tag/rusty-snake/hexbot.svg)  
+![open issues: https://github.com/rusty-snake/hexbot/issues](https://img.shields.io/github/issues/rusty-snake/hexbot.svg)
+![open pull requests: https://github.com/rusty-snake/hexbot/pulls](https://img.shields.io/github/issues-pr/rusty-snake/hexbot.svg)
+![closed issues](https://img.shields.io/github/issues-closed/rusty-snake/hexbot.svg)
+
+<!--![GitHub language count](https://img.shields.io/github/languages/count/rusty-snake/hexbot.svg)-->
+<!--![GitHub commit activity](https://img.shields.io/github/commit-activity/w/rusty-snake/hexbot.svg)-->
+
 My solution for: https://noopschallenge.com/challenges/hexbot
 
 
