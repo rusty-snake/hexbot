@@ -44,6 +44,24 @@ tar -xvzf hexbot.tar.gz
 cd hexbot-master
 ```
 
+#### Stable code
+
+```bash
+git clone https://github.com/rusty-snake/hexbot.git
+cd hexbot
+git checkout v0.0.2
+```
+
+**Alternative**
+
+```bash
+wget -O hexbot.tar.gz https://github.com/rusty-snake/hexbot/archive/v0.0.2.tar.gz
+# or
+curl -O hexbot.tar.gz https://github.com/rusty-snake/hexbot/archive/v0.0.2.tar.gz
+tar -xvzf
+cd hexbot-v0.0.2
+```
+
 ### Compile & Run
 
 ```
