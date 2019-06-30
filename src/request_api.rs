@@ -46,3 +46,18 @@ impl fmt::Display for Hexbot {
 pub fn get_hexbot() -> Result<Hexbot, reqwest::Error> {
     reqwest::get("https://api.noopschallenge.com/hexbot")?.json::<Hexbot>()
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_get_color() {
+        let color = Color {
+            value: "#FFFFFF".to_string(),
+        };
+        let hexbot = Hexbot { colors: [color; 1] };
+
+        assert_eq!(hexbot.get_color(), "#FFFFFF");
+    }
+}
