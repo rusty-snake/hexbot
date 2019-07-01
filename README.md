@@ -2,7 +2,7 @@
 
 ![top language: rust](https://img.shields.io/github/languages/top/rusty-snake/hexbot.svg?label=Rust&logo=rust)
 ![license: GPL-3.0](https://img.shields.io/github/license/rusty-snake/hexbot.svg)
-![latest SemVer tag: v0.0.1](https://img.shields.io/github/tag/rusty-snake/hexbot.svg)  
+![latest SemVer tag: v0.0.2](https://img.shields.io/github/tag/rusty-snake/hexbot.svg)  
 ![open issues: https://github.com/rusty-snake/hexbot/issues](https://img.shields.io/github/issues/rusty-snake/hexbot.svg)
 ![open pull requests: https://github.com/rusty-snake/hexbot/pulls](https://img.shields.io/github/issues-pr/rusty-snake/hexbot.svg)
 ![closed issues](https://img.shields.io/github/issues-closed/rusty-snake/hexbot.svg)
@@ -66,18 +66,12 @@ cd hexbot-v0.0.2
 
 ```
 $ cargo run --release
-   Compiling semver-parser v0.7.0
+    Updating crates.io index
    ...
-   Compiling hexbot v0.0.1 (/home/rusty-snake/hexbot)
+   Compiling hexbot v0.0.2 (/home/rusty-snake/hexbot)
     Finished release [optimized] target(s) in 8m 5s
      Running `target/release/hexbot`
-[src/main.rs:24] hexbot = Hexbot {
-    colors: [
-        Color {
-            value: "#95FB4B",
-        },
-    ],
-}
+Hexbot responded with color #F1FF64.
 ```
 
 **Compile only**
@@ -96,12 +90,15 @@ $ cargo run
 ## Changelog
 
 ```markdown
-## [0.0.1]
+## [0.0.2]
 ### Added
- - Support for requesting, parsing and printing a hexbot request without parameters.
- - All stuff around a project like README, LICENSE, .gitignore, ...
+ - `get_color()` methode to `request_api::Hexbot`.
+ - `impl`lementation for `fmt::Display` to `request_api::Hexbot`.
 
-[0.0.1]: https://github.com/rusty-snake/hexbot/tree/v0.0.1
+### Removed
+ - `pub`lic fields from `request_api::Hexbot`.
+
+[0.0.2]: https://github.com/rusty-snake/hexbot/tree/v0.0.2
 ```
 
 For the full Changelog see [CHANGELOG.md](CHANGELOG.md).
