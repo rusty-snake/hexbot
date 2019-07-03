@@ -1,12 +1,17 @@
-# Hexbot :construction:
+# Hexbot :construction: <br> [![top lang]][rust] ![rust 2018] ![rustc 1.31+] [![license]][GPLv3+] [![version]][v0.0.3]
 
-![top language: rust](https://img.shields.io/github/languages/top/rusty-snake/hexbot.svg?label=Rust&logo=rust)
-![license: GPL-3.0](https://img.shields.io/github/license/rusty-snake/hexbot.svg)
-![latest SemVer tag: v0.0.2](https://img.shields.io/github/tag/rusty-snake/hexbot.svg)  
-![open issues: https://github.com/rusty-snake/hexbot/issues](https://img.shields.io/github/issues/rusty-snake/hexbot.svg)
-![open pull requests: https://github.com/rusty-snake/hexbot/pulls](https://img.shields.io/github/issues-pr/rusty-snake/hexbot.svg)
-![closed issues](https://img.shields.io/github/issues-closed/rusty-snake/hexbot.svg)
+[top lang]: https://img.shields.io/github/languages/top/rusty-snake/hexbot.svg?label=ust&logo=rust
+[rust]: https://www.rust-lang.org/
+[rustc 1.31+]: https://img.shields.io/badge/rustc-1.31+-blue.svg
+[rust 2018]: https://img.shields.io/badge/rust--edition-2018-blue.svg
+[license]: https://img.shields.io/github/license/rusty-snake/hexbot.svg?color=darkred
+[GPLv3+]: COPYING
+[version]: https://img.shields.io/github/tag/rusty-snake/hexbot.svg?label=version
+[v0.0.3]: https://github.com/rusty-snake/hexbot/tree/v0.0.3
 
+<!--![GitHub open issues](https://img.shields.io/github/issues/rusty-snake/hexbot.svg)-->
+<!--![GitHub closed issues](https://img.shields.io/github/issues-closed/rusty-snake/hexbot.svg)-->
+<!--![GitHub open pull requests](https://img.shields.io/github/issues-pr/rusty-snake/hexbot.svg)-->
 <!--![GitHub language count](https://img.shields.io/github/languages/count/rusty-snake/hexbot.svg)-->
 <!--![GitHub commit activity](https://img.shields.io/github/commit-activity/w/rusty-snake/hexbot.svg)-->
 
@@ -34,33 +39,9 @@ git clone https://github.com/rusty-snake/hexbot.git
 cd hexbot
 ```
 
-**Alternative**
-
-```bash
-wget -O hexbot.tar.gz https://github.com/rusty-snake/hexbot/archive/master.tar.gz
-# or
-curl -O hexbot.tar.gz https://github.com/rusty-snake/hexbot/archive/master.tar.gz
-tar -xvzf hexbot.tar.gz
-cd hexbot-master
-```
-
 #### Stable code
 
-```bash
-git clone https://github.com/rusty-snake/hexbot.git
-cd hexbot
-git checkout v0.0.2
-```
-
-**Alternative**
-
-```bash
-wget -O hexbot.tar.gz https://github.com/rusty-snake/hexbot/archive/v0.0.2.tar.gz
-# or
-curl -O hexbot.tar.gz https://github.com/rusty-snake/hexbot/archive/v0.0.2.tar.gz
-tar -xvzf
-cd hexbot-v0.0.2
-```
+Should not be necessary because new features are created in separate branches and master only contains minor bugfixes or new versions. If it is still required: `git chekout v0.0.3` _or whatever the lastet version is_.
 
 ### Compile & Run
 
