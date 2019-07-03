@@ -49,7 +49,7 @@ Should not be necessary because new features are created in separate branches an
 $ cargo run --release
     Updating crates.io index
    ...
-   Compiling hexbot v0.0.2 (/home/rusty-snake/hexbot)
+   Compiling hexbot v0.0.3 (/home/rusty-snake/hexbot)
     Finished release [optimized] target(s) in 8m 5s
      Running `target/release/hexbot`
 Hexbot responded with color #F1FF64.
@@ -71,15 +71,11 @@ $ cargo run
 ## Changelog
 
 ```markdown
-## [0.0.2]
+## [0.0.3]
 ### Added
- - `get_color()` methode to `request_api::Hexbot`.
- - `impl`lementation for `fmt::Display` to `request_api::Hexbot`.
+ * tests (see c461bb9).
 
-### Removed
- - `pub`lic fields from `request_api::Hexbot`.
-
-[0.0.2]: https://github.com/rusty-snake/hexbot/tree/v0.0.2
+[0.0.3]: https://github.com/rusty-snake/hexbot/tree/v0.0.3
 ```
 
 For the full Changelog see [CHANGELOG.md](CHANGELOG.md).
