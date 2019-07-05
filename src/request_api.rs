@@ -17,30 +17,36 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-use serde::Deserialize;
+use serde::{Deserialize, Deserializer};
 use std::fmt;
+use tint::Color;
 
-#[derive(Clone, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd)]
-struct Color {
-    value: String,
+#[derive(Clone, Copy, Debug, Deserialize, PartialEq)]
+struct Dot {
+    #[serde(deserialize_with = "deserialize_color")]
+    value: Color,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(Clone, Copy, Debug, Deserialize, PartialEq)]
 pub struct Hexbot {
-    colors: [Color; 1],
+    colors: [Dot; 1],
 }
 
 impl Hexbot {
     #[inline]
-    pub fn get_color(&self) -> &str {
+    pub fn get_color(&self) -> &Color {
         &self.colors[0].value
     }
 }
 
 impl fmt::Display for Hexbot {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.colors[0].value)
+        write!(f, "{}", self.colors[0].value.to_hex().to_uppercase())
     }
+}
+
+fn deserialize_color<'d, D: Deserializer<'d>>(deser: D) -> Result<Color, D::Error> {
+    Ok(Color::from_hex(&String::deserialize(deser)?))
 }
 
 pub fn get_hexbot() -> Result<Hexbot, reqwest::Error> {
@@ -53,11 +59,11 @@ mod tests {
 
     #[test]
     fn test_get_color() {
-        let color = Color {
-            value: "#FFFFFF".to_string(),
+        let color = Dot {
+            value: Color::new(1.0, 1.0, 1.0, 1.0),
         };
         let hexbot = Hexbot { colors: [color; 1] };
 
-        assert_eq!(hexbot.get_color(), "#FFFFFF");
+        assert_eq!(hexbot.get_color(), &Color::new(1.0, 1.0, 1.0, 1.0));
     }
 }
