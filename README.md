@@ -48,7 +48,7 @@ Should not be necessary because new features are created in separate branches an
 $ cargo run --release
     Updating crates.io index
    ...
-   Compiling hexbot v0.0.3 (/home/rusty-snake/hexbot)
+   Compiling hexbot v0.0.4 (/home/rusty-snake/hexbot)
     Finished release [optimized] target(s) in 8m 5s
      Running `target/release/hexbot`
 Hexbot responded with color #F1FF64.
