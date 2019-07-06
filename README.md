@@ -1,13 +1,13 @@
-# Hexbot :construction: <br> [![top lang]][rust] ![rust 2018] ![rustc 1.31+] [![license]][GPLv3+] [![version]][v0.0.3]
+# Hexbot :construction: <br> [![top lang]][rust] ![rust 2018] ![rustc 1.31+] [![GPLv3+]][COPYING] [![version]][tag]
 
-[top lang]: https://img.shields.io/github/languages/top/rusty-snake/hexbot.svg?label=ust&logo=rust
+[top lang]: https://img.shields.io/github/languages/top/rusty-snake/hexbot.svg?logo=rust
 [rust]: https://www.rust-lang.org/
 [rustc 1.31+]: https://img.shields.io/badge/rustc-1.31+-blue.svg
 [rust 2018]: https://img.shields.io/badge/rust--edition-2018-blue.svg
-[license]: https://img.shields.io/github/license/rusty-snake/hexbot.svg?color=darkred
-[GPLv3+]: COPYING
+[GPLv3+]: https://img.shields.io/github/license/rusty-snake/hexbot.svg?color=darkred
+[COPYING]: COPYING
 [version]: https://img.shields.io/github/tag/rusty-snake/hexbot.svg?label=version
-[v0.0.3]: https://github.com/rusty-snake/hexbot/tree/v0.0.3
+[tag]: https://github.com/rusty-snake/hexbot/tree/v0.0.3
 
 <!--![GitHub open issues](https://img.shields.io/github/issues/rusty-snake/hexbot.svg)-->
 <!--![GitHub closed issues](https://img.shields.io/github/issues-closed/rusty-snake/hexbot.svg)-->
@@ -17,12 +17,11 @@
 
 My solution for: https://noopschallenge.com/challenges/hexbot
 
-
 ## Installing
 
 ### Dependencies (only for building)
 
-**cargo, rustc, pkg-config, openssl**
+cargo, rustc, pkg-config, openssl
 
 | Distro                   | command(s)                                                                         |
 | ------------------------ | ---------------------------------------------------------------------------------- |
@@ -55,17 +54,10 @@ $ cargo run --release
 Hexbot responded with color #F1FF64.
 ```
 
-**Compile only**
+#### Compile only
 
 ```
 $ cargo build --release
-```
-
-**debug build**
-
-```
-$ cargo build
-$ cargo run
 ```
 
 ## Changelog
