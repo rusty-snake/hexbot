@@ -66,6 +66,27 @@ $ cargo build --release
 $ cargo doc --no-deps --open
 ```
 
+## Hacking
+
+To write your own program that uses this code to request the Hexbot API so you can focus on further processing,
+copy [`src/request_api.rs`](src/request_api.rs) into `src/request_api.rs` in your project and paste the following to your files.
+
+`Cargo.toml`:
+```toml
+[dependencies]
+reqwest = "0.9.18"
+serde = { version = "1.0", default_features = false, features = ["derive"] }
+tint = "1.0.1"
+```
+
+`src/main.rs`:
+```rust
+pub mod request_api;
+use request_api::*;
+```
+
+For the next steps, see the documentation.
+
 ## Changelog
 
 ```markdown
