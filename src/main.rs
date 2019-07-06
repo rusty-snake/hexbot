@@ -17,7 +17,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-mod request_api;
+// needs pub to generate documentation.
+pub mod request_api;
 
 fn main() {
     let hexbot = request_api::fetch().unwrap();

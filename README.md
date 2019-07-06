@@ -60,6 +60,12 @@ Hexbot responded with color #F1FF64.
 $ cargo build --release
 ```
 
+#### documentation
+
+```
+$ cargo doc --no-deps --open
+```
+
 ## Changelog
 
 ```markdown

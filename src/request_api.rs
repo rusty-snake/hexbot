@@ -17,6 +17,27 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+//! All code to request the [Hexbot-API] and process the response.
+//!
+//! # Examples
+//!
+//! ```
+//! let hexbot: Hexbot = fetch().unwrap();
+//! println!("{}", hexbot); // #RRGGBB
+//! let color: &tint::Color = hexbot.color();
+//! dbg!(color.red);         // f64: red value
+//! dbg!(color.green);       // f64: green value
+//! dbg!(color.blue);        // f64: red value
+//! dbg!(color.to_rgb1());   // (f64, f64, f64): (R, G, B)
+//! dbg!(color.to_rgb255()); // (u8, u8, u8): (R, G, B)
+//! dbg!(color.to_hex());    // String: "#rrggbb"
+//! dbg!(color.to_hsv());    // (f64, f64, f64): (H, S, V)
+//! dbg!(color.to_hsl());    // (f64, f64, f64): (H, S, L)
+//! dbg!(color.to_yiq());    // (f64, f64, f64): (Y, I, Q)
+//! ```
+//!
+//! [Hexbot-API]: https://noopschallenge.com/challenges/hexbot
+
 use serde::{Deserialize, Deserializer};
 use std::fmt;
 use tint::Color;
@@ -27,6 +48,7 @@ struct Dot {
     value: Color,
 }
 
+/// Deserialized response.
 #[derive(Clone, Copy, Debug, Deserialize, PartialEq)]
 pub struct Hexbot {
     colors: [Dot; 1],
@@ -34,6 +56,12 @@ pub struct Hexbot {
 
 impl Hexbot {
     #[inline]
+    /// Get the color from the response.
+    ///
+    /// The return type is [tint::Color], see its [documentation][tint::Color]
+    /// for further processing.
+    ///
+    /// [tint::Color]: https://docs.rs/tint/1.0.1/tint/struct.Color.html
     pub fn color(&self) -> &Color {
         &self.colors[0].value
     }
@@ -49,6 +77,7 @@ fn deserialize_color<'d, D: Deserializer<'d>>(deser: D) -> Result<Color, D::Erro
     Ok(Color::from_hex(&String::deserialize(deser)?))
 }
 
+/// Send a request and process the response.
 pub fn fetch() -> Result<Hexbot, reqwest::Error> {
     reqwest::get("https://api.noopschallenge.com/hexbot")?.json::<Hexbot>()
 }
