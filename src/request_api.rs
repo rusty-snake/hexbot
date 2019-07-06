@@ -34,7 +34,7 @@ pub struct Hexbot {
 
 impl Hexbot {
     #[inline]
-    pub fn get_color(&self) -> &Color {
+    pub fn color(&self) -> &Color {
         &self.colors[0].value
     }
 }
@@ -49,7 +49,7 @@ fn deserialize_color<'d, D: Deserializer<'d>>(deser: D) -> Result<Color, D::Erro
     Ok(Color::from_hex(&String::deserialize(deser)?))
 }
 
-pub fn get_hexbot() -> Result<Hexbot, reqwest::Error> {
+pub fn fetch() -> Result<Hexbot, reqwest::Error> {
     reqwest::get("https://api.noopschallenge.com/hexbot")?.json::<Hexbot>()
 }
 
@@ -64,6 +64,6 @@ mod tests {
         };
         let hexbot = Hexbot { colors: [color; 1] };
 
-        assert_eq!(hexbot.get_color(), &Color::new(1.0, 1.0, 1.0, 1.0));
+        assert_eq!(hexbot.color(), &Color::new(1.0, 1.0, 1.0, 1.0));
     }
 }

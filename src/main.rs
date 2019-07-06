@@ -20,9 +20,6 @@
 mod request_api;
 
 fn main() {
-    let hexbot = request_api::get_hexbot().unwrap();
+    let hexbot = request_api::fetch().unwrap();
     println!("Hexbot responded with color {}.", hexbot);
-
-    //dbg!(request_api::get_hexbot().unwrap().get_color().to_rgb255());
-    //dbg!(request_api::get_hexbot().unwrap().get_color().red);
 }
