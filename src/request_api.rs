@@ -40,7 +40,7 @@ impl Hexbot {
 }
 
 impl fmt::Display for Hexbot {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "{}", self.colors[0].value.to_hex().to_uppercase())
     }
 }
