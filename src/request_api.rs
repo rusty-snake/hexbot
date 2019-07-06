@@ -58,10 +58,10 @@ impl Hexbot {
     #[inline]
     /// Get the color from the response.
     ///
-    /// The return type is [tint::Color], see its [documentation][tint::Color]
+    /// The return type is `&tint::Color`, see its [documentation]
     /// for further processing.
     ///
-    /// [tint::Color]: https://docs.rs/tint/1.0.1/tint/struct.Color.html
+    /// [documentation]: https://docs.rs/tint/1.0.1/tint/struct.Color.html
     pub fn color(&self) -> &Color {
         &self.colors[0].value
     }
