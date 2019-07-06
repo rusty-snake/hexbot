@@ -90,11 +90,17 @@ For the next steps, see the documentation.
 ## Changelog
 
 ```markdown
-## [0.0.3]
+## [0.0.4]
 ### Added
- * tests (see c461bb9).
+ * documentation & hacking.
 
-[0.0.3]: https://github.com/rusty-snake/hexbot/tree/v0.0.3
+### Changed
+ * Function names:
+   * `get_color()` -> `color()`
+   * `get_hexbot()` -> `fetch()`
+ * Use `tint::Color` instead of `String` for colors.
+
+[0.0.4]: https://github.com/rusty-snake/hexbot/tree/v0.0.4
 ```
 
 For the full Changelog see [CHANGELOG.md](CHANGELOG.md).
