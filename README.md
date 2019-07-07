@@ -1,4 +1,4 @@
-# Hexbot :construction: <br> [![top lang]][rust] ![rust 2018] ![rustc 1.31+] [![GPLv3+]][COPYING] [![version]][tag]
+# Hexbot :construction: <br> [![top lang]][rust] ![rust 2018] ![rustc 1.31+] [![GPLv3+]][COPYING] ![version]
 
 [top lang]: https://img.shields.io/github/languages/top/rusty-snake/hexbot.svg?logo=rust
 [rust]: https://www.rust-lang.org/
@@ -6,13 +6,10 @@
 [rust 2018]: https://img.shields.io/badge/rust--edition-2018-blue.svg
 [GPLv3+]: https://img.shields.io/github/license/rusty-snake/hexbot.svg?color=darkred
 [COPYING]: COPYING
-[version]: https://img.shields.io/github/tag/rusty-snake/hexbot.svg?label=version
-[tag]: https://github.com/rusty-snake/hexbot/tree/v0.0.3
+[version]: https://img.shields.io/github/tag/rusty-snake/hexbot.svg?label=lastet%20release
 
 <!--![GitHub open issues](https://img.shields.io/github/issues/rusty-snake/hexbot.svg)-->
 <!--![GitHub closed issues](https://img.shields.io/github/issues-closed/rusty-snake/hexbot.svg)-->
-<!--![GitHub open pull requests](https://img.shields.io/github/issues-pr/rusty-snake/hexbot.svg)-->
-<!--![GitHub language count](https://img.shields.io/github/languages/count/rusty-snake/hexbot.svg)-->
 <!--![GitHub commit activity](https://img.shields.io/github/commit-activity/w/rusty-snake/hexbot.svg)-->
 
 My solution for: https://noopschallenge.com/challenges/hexbot
@@ -48,10 +45,10 @@ Should not be necessary because new features are created in separate branches an
 $ cargo run --release
     Updating crates.io index
    ...
-   Compiling hexbot v0.0.4 (/home/rusty-snake/hexbot)
-    Finished release [optimized] target(s) in 8m 5s
+   Compiling hexbot v0.0.5 (/home/rusty-snake/hexbot)
+    Finished release [optimized] target(s) in 4m 2s
      Running `target/release/hexbot`
-Hexbot responded with color #F1FF64.
+Hexbot responded with this colors [#69B4F4, #170313, #5AC9A6].
 ```
 
 #### Compile only
@@ -93,17 +90,14 @@ For the next steps, see the documentation.
 ## Changelog
 
 ```markdown
-## [0.0.4]
+## [0.0.5]
 ### Added
- * documentation & hacking.
 
 ### Changed
- * Function names:
-   * `get_color()` -> `color()`
-   * `get_hexbot()` -> `fetch()`
- * Use `tint::Color` instead of `String` for colors.
 
-[0.0.4]: https://github.com/rusty-snake/hexbot/tree/v0.0.4
+### Removed
+
+[0.0.5]: https://github.com/rusty-snake/hexbot/tree/v0.0.5
 ```
 
 For the full Changelog see [CHANGELOG.md](CHANGELOG.md).
