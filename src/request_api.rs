@@ -39,6 +39,7 @@
 //! [Hexbot-API]: https://noopschallenge.com/challenges/hexbot
 
 use serde::{Deserialize, Deserializer};
+use std::error;
 use std::fmt;
 use tint::Color;
 
@@ -78,9 +79,50 @@ fn deserialize_color<'d, D: Deserializer<'d>>(deser: D) -> Result<Color, D::Erro
 }
 
 /// Send a request and process the response.
-pub fn fetch() -> Result<Hexbot, reqwest::Error> {
-    reqwest::get("https://api.noopschallenge.com/hexbot")?.json::<Hexbot>()
+pub fn fetch() -> Result<Hexbot, Error> {
+    Ok(reqwest::get("https://api.noopschallenge.com/hexbot")?.json::<Hexbot>()?)
 }
+
+// Error
+
+/// Request-API Error
+#[derive(Debug)]
+pub enum Error {
+    /// Contains a reqwest error.
+    Reqwest(reqwest::Error),
+}
+
+impl fmt::Display for Error {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match *self {
+            Error::Reqwest(ref err) => err.fmt(f),
+        }
+    }
+}
+
+impl error::Error for Error {
+    // Usage of description is soft-deprecated; use Display.
+    #[cfg(ErrorDescription)]
+    fn description(&self) -> &str {
+        match *self {
+            Error::Reqwest(ref err) => err.description(),
+        }
+    }
+
+    fn source(&self) -> Option<&(dyn error::Error + 'static)> {
+        match *self {
+            Error::Reqwest(ref err) => err.source(),
+        }
+    }
+}
+
+impl From<reqwest::Error> for Error {
+    fn from(err: reqwest::Error) -> Self {
+        Error::Reqwest(err)
+    }
+}
+
+// Tests
 
 #[cfg(test)]
 mod tests {

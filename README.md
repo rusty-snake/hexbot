@@ -77,6 +77,9 @@ copy [`src/request_api.rs`](src/request_api.rs) into `src/request_api.rs` in you
 reqwest = "0.9.18"
 serde = { version = "1.0", default_features = false, features = ["derive"] }
 tint = "1.0.1"
+
+[features]
+ErrorDescription = []
 ```
 
 `src/main.rs`:

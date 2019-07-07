@@ -10,3 +10,7 @@ license = "GPL-3.0-or-later"
 reqwest = "0.9.18"
 serde = { version = "1.0", default_features = false, features = ["derive"] }
 tint = "1.0.1"
+
+[features]
+# description() is deprecated; use Display
+ErrorDescription = []
