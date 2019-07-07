@@ -44,8 +44,8 @@ use tint::Color;
 
 #[derive(Clone, Copy, Debug, Deserialize, PartialEq)]
 struct Dot {
-    #[serde(deserialize_with = "deserialize_color")]
-    value: Color,
+    #[serde(deserialize_with = "deserialize_color", rename = "value")]
+    color: Color,
 }
 
 /// Deserialized response.
@@ -63,13 +63,13 @@ impl Hexbot {
     ///
     /// [documentation]: https://docs.rs/tint/1.0.1/tint/struct.Color.html
     pub fn color(&self) -> &Color {
-        &self.colors[0].value
+        &self.colors[0].color
     }
 }
 
 impl fmt::Display for Hexbot {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{}", self.colors[0].value.to_hex().to_uppercase())
+        write!(f, "{}", self.colors[0].color.to_hex().to_uppercase())
     }
 }
 
@@ -89,7 +89,7 @@ mod tests {
     #[test]
     fn test_get_color() {
         let color = Dot {
-            value: Color::new(1.0, 1.0, 1.0, 1.0),
+            color: Color::new(1.0, 1.0, 1.0, 1.0),
         };
         let hexbot = Hexbot { colors: [color; 1] };
 
