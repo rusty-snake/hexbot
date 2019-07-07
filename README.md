@@ -92,10 +92,19 @@ For the next steps, see the documentation.
 ```markdown
 ## [0.0.5]
 ### Added
+ * custom error type.
+ * more tests.
+ * `request_api::Hexbot.colors()`.
+ * support for the count parameter of hexbot.
 
 ### Changed
+ * output of `fmt::Display` for Hexbot.
+ * `request_api::fetch()`
+   * old: `request_api::fetch() -> Result<Hexbot, reqwest::Error>`
+   * new: `request_api::fetch(count: i32) -> Result<Hexbot, Error>`
 
 ### Removed
+ * `request_api::Hexbot.color()`.
 
 [0.0.5]: https://github.com/rusty-snake/hexbot/tree/v0.0.5
 ```
