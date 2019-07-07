@@ -17,14 +17,16 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-//! All code to request the [Hexbot-API] and process the response.
+//! Request the [Hexbot-API] and process the response.
 //!
 //! # Examples
 //!
 //! ```
-//! let hexbot: Hexbot = fetch().unwrap();
-//! println!("{}", hexbot); // #RRGGBB
-//! let color: &tint::Color = hexbot.color();
+//! let hexbot: Hexbot = fetch(3).unwrap();
+//! println!("{}", hexbot); // [#RRGGBB, #RRGGBB, #RRGGBB]
+//! let colors: Vec<&tint::Color> = hexbot.colors();
+//! dbg!(&colors);           // &vec![&Color, &Color, &Color]
+//! let color: &tint::Color = colors.first().unwrap();
 //! dbg!(color.red);         // f64: red value
 //! dbg!(color.green);       // f64: green value
 //! dbg!(color.blue);        // f64: red value
@@ -45,32 +47,35 @@ use tint::Color;
 
 #[derive(Clone, Copy, Debug, Deserialize, PartialEq)]
 struct Dot {
-    #[serde(deserialize_with = "deserialize_color", rename = "value")]
+    #[serde(rename = "value", deserialize_with = "deserialize_color")]
     color: Color,
 }
 
-/// Deserialized response.
-#[derive(Clone, Copy, Debug, Deserialize, PartialEq)]
+/// Deserialized response
+#[derive(Debug, Deserialize, PartialEq)]
 pub struct Hexbot {
-    colors: [Dot; 1],
+    colors: Vec<Dot>,
 }
 
 impl Hexbot {
-    #[inline]
-    /// Get the color from the response.
-    ///
-    /// The return type is `&tint::Color`, see its [documentation]
-    /// for further processing.
-    ///
-    /// [documentation]: https://docs.rs/tint/1.0.1/tint/struct.Color.html
-    pub fn color(&self) -> &Color {
-        &self.colors[0].color
+    /// Returns a vector containing a reference to all colors.
+    pub fn colors(&self) -> Vec<&Color> {
+        self.colors.iter().map(|dot| &dot.color).collect()
     }
 }
 
 impl fmt::Display for Hexbot {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{}", self.colors[0].color.to_hex().to_uppercase())
+        write!(f, "[")?;
+        let len = self.colors.len() - 1;
+        for (counter, Dot { color }) in self.colors.iter().enumerate() {
+            if counter == len {
+                write!(f, "{}]", color.to_hex().to_uppercase())?;
+            } else {
+                write!(f, "{}, ", color.to_hex().to_uppercase())?;
+            }
+        }
+        Ok(())
     }
 }
 
@@ -78,9 +83,19 @@ fn deserialize_color<'d, D: Deserializer<'d>>(deser: D) -> Result<Color, D::Erro
     Ok(Color::from_hex(&String::deserialize(deser)?))
 }
 
-/// Send a request and process the response.
-pub fn fetch() -> Result<Hexbot, Error> {
-    Ok(reqwest::get("https://api.noopschallenge.com/hexbot")?.json::<Hexbot>()?)
+/// Fetch the given `count` of colors from the Hexbot API.
+///
+/// `count` must be between 1 and 1000.
+pub fn fetch(count: i32) -> Result<Hexbot, Error> {
+    if 0 < count && count <= 1000 {
+        Ok(reqwest::get(&format!(
+            "https://api.noopschallenge.com/hexbot?count={}",
+            count
+        ))?
+        .json()?)
+    } else {
+        Err(Error::CountOutOfRange)
+    }
 }
 
 // Error
@@ -88,30 +103,35 @@ pub fn fetch() -> Result<Hexbot, Error> {
 /// Request-API Error
 #[derive(Debug)]
 pub enum Error {
-    /// Contains a reqwest error.
+    /// Contains a reqwest error
     Reqwest(reqwest::Error),
+    /// Occurs when the count is higher then 1000 or lower then 1.
+    CountOutOfRange,
 }
 
 impl fmt::Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match *self {
             Error::Reqwest(ref err) => err.fmt(f),
+            Error::CountOutOfRange => write!(f, "count must be between 1 and 1000"),
         }
     }
 }
 
 impl error::Error for Error {
-    // Usage of description is soft-deprecated; use Display.
+    // Usage of description is soft-deprecated; use Display
     #[cfg(ErrorDescription)]
     fn description(&self) -> &str {
         match *self {
             Error::Reqwest(ref err) => err.description(),
+            Error::CountOutOfRange => "count must be between 1 and 1000",
         }
     }
 
     fn source(&self) -> Option<&(dyn error::Error + 'static)> {
         match *self {
             Error::Reqwest(ref err) => err.source(),
+            Error::CountOutOfRange => None,
         }
     }
 }
@@ -129,12 +149,24 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_get_color() {
-        let color = Dot {
-            color: Color::new(1.0, 1.0, 1.0, 1.0),
+    fn test_colors() {
+        let hexbot = Hexbot {
+            colors: vec![
+                Dot {
+                    color: Color::new(1.0, 1.0, 1.0, 1.0),
+                },
+                Dot {
+                    color: Color::new(0.0, 0.0, 0.0, 1.0),
+                },
+            ],
         };
-        let hexbot = Hexbot { colors: [color; 1] };
 
-        assert_eq!(hexbot.color(), &Color::new(1.0, 1.0, 1.0, 1.0));
+        assert_eq!(
+            hexbot.colors(),
+            vec![
+                &Color::new(1.0, 1.0, 1.0, 1.0),
+                &Color::new(0.0, 0.0, 0.0, 1.0),
+            ]
+        );
     }
 }

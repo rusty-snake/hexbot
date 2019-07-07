@@ -20,7 +20,9 @@
 // needs pub to generate documentation.
 pub mod request_api;
 
-fn main() {
-    let hexbot = request_api::fetch().unwrap();
-    println!("Hexbot responded with color {}.", hexbot);
+fn main() -> Result<(), request_api::Error> {
+    let hexbot = request_api::fetch(3)?;
+    println!("Hexbot responded with this colors {}.", hexbot);
+
+    Ok(())
 }
