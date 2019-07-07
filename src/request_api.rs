@@ -169,4 +169,29 @@ mod tests {
             ]
         );
     }
+
+    #[test]
+    fn test_fetch_count_out_of_range() {
+        assert!(match fetch(-1) {
+            Err(Error::CountOutOfRange) => true,
+            _ => false,
+        });
+        assert!(match fetch(0) {
+            Err(Error::CountOutOfRange) => true,
+            _ => false,
+        });
+        assert!(match fetch(1001) {
+            Err(Error::CountOutOfRange) => true,
+            _ => false,
+        });
+    }
+
+    #[test]
+    #[ignore]
+    fn test_fetch() {
+        let mut hb = fetch(3).unwrap();
+        assert_eq!(hb.colors.len(), 3);
+        hb.colors = vec![];
+        assert_eq!(hb, Hexbot { colors: vec![] });
+    }
 }
