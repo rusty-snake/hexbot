@@ -8,10 +8,6 @@
 [COPYING]: COPYING
 [version]: https://img.shields.io/github/tag/rusty-snake/hexbot.svg?label=lastet%20release
 
-<!--![GitHub open issues](https://img.shields.io/github/issues/rusty-snake/hexbot.svg)-->
-<!--![GitHub closed issues](https://img.shields.io/github/issues-closed/rusty-snake/hexbot.svg)-->
-<!--![GitHub commit activity](https://img.shields.io/github/commit-activity/w/rusty-snake/hexbot.svg)-->
-
 My solution for: https://noopschallenge.com/challenges/hexbot
 
 ## Installing
@@ -45,10 +41,13 @@ Should not be necessary because new features are created in separate branches an
 $ cargo run --release
     Updating crates.io index
    ...
-   Compiling hexbot v0.0.5 (/home/rusty-snake/hexbot)
+   Compiling hexbot v0.0.6 (/home/rusty-snake/hexbot)
     Finished release [optimized] target(s) in 4m 2s
      Running `target/release/hexbot`
-Hexbot responded with this colors [#69B4F4, #170313, #5AC9A6].
+A hexbot with five colors: [#1F13ED, #84769D, #4D052C, #8F64C5, #68C071]
+The sum of all red values: 487
+A hexbot with five colors and coordiantes: [#9A1184-(35|85), #C223F0-(95|79), #F7602A-(93|51), #9081C9-(48|51), #A18FAC-(12|50)]
+The second color at position (95|79) has a blue component of 0.94%.
 ```
 
 #### Compile only
@@ -76,37 +75,68 @@ serde = { version = "1.0", default_features = false, features = ["derive"] }
 tint = "1.0.1"
 
 [features]
+# description() on Error types is deprecated, if you still need it add
+# `--feature="ErrorDescription"` to the cargo command.
 ErrorDescription = []
 ```
 
 `src/main.rs`:
 ```rust
+// required
 pub mod request_api;
+
+//
+// Example
+//
+
 use request_api::*;
+
+fn main {
+    let hexbot = fetch(5).unwrap();
+    println!("A hexbot with five colors: {}", hexbot);
+
+    let mut red_sum = 0;
+    for color in hexbot.colors() {
+        red_sum += color.to_rgb255().0 as i32;
+    }
+    println!("The sum of all red values: {}", red_sum);
+
+    let hexbot_with_coordinates = fetch_with_coordinates(5, 100, 100).unwrap();
+    println!(
+        "A hexbot with five colors and coordiantes: {}",
+        hexbot_with_coordinates
+    );
+
+    let coordinate = hexbot_with_coordinates.coordinates().unwrap()[1];
+    let color = hexbot_with_coordinates.colors()[1];
+    println!(
+        "The second color at position ({x}|{y}) has a blue component of {blue:.2}%.",
+        blue = color.blue,
+        x = coordinate.0,
+        y = coordinate.1
+    );
+}
 ```
 
-For the next steps, see the documentation.
+For the next steps, see the [documentation](#documentation).
 
 ## Changelog
 
 ```markdown
-## [0.0.5]
+## [0.0.6]
 ### Added
- * custom error type.
- * more tests.
- * `request_api::Hexbot.colors()`.
- * support for the count parameter of hexbot.
+ * `Hexbot.clone()` (derive trait).
+ * support for the width and height parameters of hexbot.
+   * `Hexbot.coordinates()`
+   * `Hexbot.has_coordinates()`
+   * `request_api::fetch_with_coordinates()`
+   * `Error::WidthHeightOutOfRange`
 
 ### Changed
- * output of `fmt::Display` for Hexbot.
- * `request_api::fetch()`
-   * old: `request_api::fetch() -> Result<Hexbot, reqwest::Error>`
-   * new: `request_api::fetch(count: i32) -> Result<Hexbot, Error>`
+ * `fmt::Display` for `Hexbot`.
+ * Improved docs & Hacking.
 
-### Removed
- * `request_api::Hexbot.color()`.
-
-[0.0.5]: https://github.com/rusty-snake/hexbot/tree/v0.0.5
+[0.0.6]: https://github.com/rusty-snake/hexbot/tree/v0.0.6
 ```
 
 For the full Changelog see [CHANGELOG.md](CHANGELOG.md).
