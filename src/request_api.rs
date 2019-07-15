@@ -380,6 +380,25 @@ mod tests {
     }
 
     #[test]
+    fn test_has_coordinates() {
+        let hexbot = Hexbot {
+            colors: vec![Dot {
+                color: Color::new(1.0, 1.0, 1.0, 1.0),
+                coordinates: None,
+            }],
+        };
+        assert_eq!(hexbot.has_coordinates(), false);
+
+        let hexbot = Hexbot {
+            colors: vec![Dot {
+                color: Color::new(1.0, 1.0, 1.0, 1.0),
+                coordinates: Some(Coordinate { x: 500, y: 30 }),
+            }],
+        };
+        assert_eq!(hexbot.has_coordinates(), true);
+    }
+
+    #[test]
     fn test_fetch() {
         // check that 0 results in Error::CountOutOfRange
         assert!(match fetch(0, None) {
@@ -401,10 +420,215 @@ mod tests {
             Err(Error::CountOutOfRange) => false,
             _ => true,
         });
+        // check for an empty seed
+        assert!(if let Err(Error::EmptySeed) = fetch(1, Some(&[])) {
+            true
+        } else {
+            false
+        });
+        // check that a seed with 10 colors is valid
+        assert!(
+            if let Err(Error::SeedToLong) = fetch(1, Some(&[0, 0, 0, 0, 0, 0, 0, 0, 0, 0])) {
+                false
+            } else {
+                true
+            }
+        );
+        // check that a seed with 11 colors is invalid
+        assert!(
+            if let Err(Error::SeedToLong) = fetch(1, Some(&[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])) {
+                true
+            } else {
+                false
+            }
+        );
+        // check that a negative color is invalid
+        assert!(
+            if let Err(Error::InvalidSeedColor) = fetch(1, Some(&[-1])) {
+                true
+            } else {
+                false
+            }
+        );
+        // check that 0 is valid
+        assert!(if let Err(Error::InvalidSeedColor) = fetch(1, Some(&[0])) {
+            false
+        } else {
+            true
+        });
+        // check that 0x_FF_FF_FF is valid
+        assert!(
+            if let Err(Error::InvalidSeedColor) = fetch(1, Some(&[16777215])) {
+                false
+            } else {
+                true
+            }
+        );
+        // check that 0x_FF_FF_FF + 1 is invalid
+        assert!(
+            if let Err(Error::InvalidSeedColor) = fetch(1, Some(&[16777216])) {
+                true
+            } else {
+                false
+            }
+        );
         // Check that the Ok() data type of fetch is hexbot.
         // NOTE: That this is done during compilation, not during execution.
         #[allow(unused_variables)]
         match fetch(3, None) {
+            Ok(hb) => {
+                let hexbot: Hexbot = hb;
+            }
+            Err(err) => (),
+        }
+    }
+
+    #[test]
+    fn test_fetch_with_coordinates() {
+        // check that 0 results in Error::CountOutOfRange
+        assert!(match fetch_with_coordinates(0, 100, 100, None) {
+            Err(Error::CountOutOfRange) => true,
+            _ => false,
+        });
+        // check that 1001 results in Error::CountOutOfRange
+        assert!(match fetch_with_coordinates(1001, 100, 100, None) {
+            Err(Error::CountOutOfRange) => true,
+            _ => false,
+        });
+        // check that 1 does not result in Error::CountOutOfRange
+        assert!(match fetch_with_coordinates(1, 100, 100, None) {
+            Err(Error::CountOutOfRange) => false,
+            _ => true,
+        });
+        // check that 1000 does not result in Error::CountOutOfRange
+        assert!(match fetch_with_coordinates(1000, 100, 100, None) {
+            Err(Error::CountOutOfRange) => false,
+            _ => true,
+        });
+        // check that width=9 ends in Error::WidthHeightOutOfRange
+        assert!(
+            if let Err(Error::WidthHeightOutOfRange) = fetch_with_coordinates(1, 9, 100, None) {
+                true
+            } else {
+                false
+            }
+        );
+        // check that width=10 not ends in Error::WidthHeightOutOfRange
+        assert!(
+            if let Err(Error::WidthHeightOutOfRange) = fetch_with_coordinates(1, 10, 100, None) {
+                false
+            } else {
+                true
+            }
+        );
+        // check that width=100,000 not ends in Error::WidthHeightOutOfRange
+        assert!(if let Err(Error::WidthHeightOutOfRange) =
+            fetch_with_coordinates(1, 100_000, 100, None)
+        {
+            false
+        } else {
+            true
+        });
+        // check that width=100,001 ends in Error::WidthHeightOutOfRange
+        assert!(if let Err(Error::WidthHeightOutOfRange) =
+            fetch_with_coordinates(1, 100_001, 100, None)
+        {
+            true
+        } else {
+            false
+        });
+        // check that height=9 ends in Error::WidthHeightOutOfRange
+        assert!(
+            if let Err(Error::WidthHeightOutOfRange) = fetch_with_coordinates(1, 100, 9, None) {
+                true
+            } else {
+                false
+            }
+        );
+        // check that height=10 not ends in Error::WidthHeightOutOfRange
+        assert!(
+            if let Err(Error::WidthHeightOutOfRange) = fetch_with_coordinates(1, 100, 10, None) {
+                false
+            } else {
+                true
+            }
+        );
+        // check that height=100,000 not ends in Error::WidthHeightOutOfRange
+        assert!(if let Err(Error::WidthHeightOutOfRange) =
+            fetch_with_coordinates(1, 100, 100_000, None)
+        {
+            false
+        } else {
+            true
+        });
+        // check that height=100,001 ends in Error::WidthHeightOutOfRange
+        assert!(if let Err(Error::WidthHeightOutOfRange) =
+            fetch_with_coordinates(1, 100, 100_001, None)
+        {
+            true
+        } else {
+            false
+        });
+        // check for an empty seed
+        assert!(
+            if let Err(Error::EmptySeed) = fetch_with_coordinates(1, 100, 100, Some(&[])) {
+                true
+            } else {
+                false
+            }
+        );
+        // check that a seed with 10 colors is valid
+        assert!(if let Err(Error::SeedToLong) =
+            fetch_with_coordinates(1, 100, 100, Some(&[0, 0, 0, 0, 0, 0, 0, 0, 0, 0]))
+        {
+            false
+        } else {
+            true
+        });
+        // check that a seed with 11 colors is invalid
+        assert!(if let Err(Error::SeedToLong) =
+            fetch_with_coordinates(1, 100, 100, Some(&[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]))
+        {
+            true
+        } else {
+            false
+        });
+        // check that a negative color is invalid
+        assert!(if let Err(Error::InvalidSeedColor) =
+            fetch_with_coordinates(1, 100, 100, Some(&[-1]))
+        {
+            true
+        } else {
+            false
+        });
+        // check that 0 is valid
+        assert!(if let Err(Error::InvalidSeedColor) =
+            fetch_with_coordinates(1, 100, 100, Some(&[0]))
+        {
+            false
+        } else {
+            true
+        });
+        // check that 0x_FF_FF_FF is valid
+        assert!(if let Err(Error::InvalidSeedColor) =
+            fetch_with_coordinates(1, 100, 100, Some(&[16777215]))
+        {
+            false
+        } else {
+            true
+        });
+        // check that 0x_FF_FF_FF + 1 is invalid
+        assert!(if let Err(Error::InvalidSeedColor) =
+            fetch_with_coordinates(1, 100, 100, Some(&[16777216]))
+        {
+            true
+        } else {
+            false
+        });
+        // Check that the Ok() data type of fetch_with_coordinates is hexbot.
+        // NOTE: That this is done during compilation, not during execution.
+        #[allow(unused_variables)]
+        match fetch_with_coordinates(3, 100, 100, None) {
             Ok(hb) => {
                 let hexbot: Hexbot = hb;
             }
