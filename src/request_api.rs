@@ -23,7 +23,7 @@
 //!
 //! ## 1
 //! ```
-//! let hexbot: Hexbot = fetch(3).unwrap();
+//! let hexbot: Hexbot = fetch(3, None).unwrap();
 //! println!("{}", hexbot); // [#RRGGBB, #RRGGBB, #RRGGBB]
 //! let colors: Vec<&tint::Color> = hexbot.colors();
 //! dbg!(&colors);           // &vec![&Color, &Color, &Color]
@@ -40,7 +40,7 @@
 //! ```
 //! ## 2
 //! ```
-//! let hexbot = fetch(5).unwrap();
+//! let hexbot = fetch(5, None).unwrap();
 //! println!("A hexbot with five colors: {}", hexbot);
 //!
 //! let mut red_sum = 0;
@@ -49,7 +49,7 @@
 //! }
 //! println!("The sum of all red values: {}", red_sum);
 //!
-//! let hexbot_with_coordinates = fetch_with_coordinates(5, 100, 100).unwrap();
+//! let hexbot_with_coordinates = fetch_with_coordinates(5, 100, 100, None).unwrap();
 //! println!(
 //!     "A hexbot with five colors and coordiantes: {}",
 //!     hexbot_with_coordinates
@@ -70,7 +70,10 @@
 use serde::{Deserialize, Deserializer};
 use std::error;
 use std::fmt;
+use std::fmt::Write;
 use tint::Color;
+
+static API_ENDPOINT: &str = "https://api.noopschallenge.com/hexbot";
 
 #[derive(Clone, Copy, Debug, Deserialize, PartialEq)]
 struct Coordinate {
@@ -106,7 +109,7 @@ impl Hexbot {
     /// # Example
     ///
     /// ```
-    /// let (x, y) = hexbot.coordinates().unwarp().get(1).unwrap();
+    /// let (x, y) = hexbot.coordinates().unwrap().get(1).unwrap();
     /// println!("x: {}, y: {}", x, y);
     /// ```
     pub fn coordinates(&self) -> Option<Vec<(i32, i32)>> {
@@ -119,7 +122,6 @@ impl Hexbot {
     }
 
     /// Returns `true` if the hexbot has coordinates, otherwise `false`.
-    // #[inline]
     pub fn has_coordinates(&self) -> bool {
         !(self.colors[0].coordinates == None)
     }
@@ -127,57 +129,74 @@ impl Hexbot {
 
 impl fmt::Display for Hexbot {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "[")?;
-        let len = self.colors.len() - 1;
+        let mut s = String::new();
+        // NOTE: When editing this line, keep in mind that it protect
+        // the `unwrap`s below.
         if self.has_coordinates() {
-            for (counter, Dot { color, coordinates }) in self.colors.iter().enumerate() {
-                if counter == len {
-                    write!(
-                        f,
-                        "{}-({}|{})]",
-                        color.to_hex().to_uppercase(),
-                        coordinates.unwrap().x,
-                        coordinates.unwrap().y
-                    )?;
-                } else {
-                    write!(
-                        f,
-                        "{}-({}|{}), ",
-                        color.to_hex().to_uppercase(),
-                        coordinates.unwrap().x,
-                        coordinates.unwrap().y
-                    )?;
-                }
+            for Dot { color, coordinates } in &self.colors {
+                write!(
+                    s,
+                    "{}-({}|{}), ",
+                    color.to_hex().to_uppercase(),
+                    // NOTE: These `unwrap`s are safe because of the
+                    // `if self.has_coordinates()` above.
+                    coordinates.unwrap().x,
+                    coordinates.unwrap().y
+                )?;
             }
         } else {
-            for (counter, Dot { color, .. }) in self.colors.iter().enumerate() {
-                if counter == len {
-                    write!(f, "{}]", color.to_hex().to_uppercase())?;
-                } else {
-                    write!(f, "{}, ", color.to_hex().to_uppercase())?;
-                }
+            for Dot { color, .. } in &self.colors {
+                write!(s, "{}, ", color.to_hex().to_uppercase())?;
             }
         }
-        Ok(())
+        // HACK:FIXME: Use a better solution to remove the last two chars.
+        s.pop();
+        s.pop();
+        write!(f, "[{}]", s)
     }
 }
 
-fn deserialize_color<'d, D: Deserializer<'d>>(deser: D) -> Result<Color, D::Error> {
+fn deserialize_color<'de, D>(deser: D) -> Result<Color, D::Error>
+where
+    D: Deserializer<'de>,
+{
     Ok(Color::from_hex(&String::deserialize(deser)?))
+}
+
+fn parse_seed(input_seed: &[i32]) -> Result<String, Error> {
+    if input_seed.is_empty() {
+        return Err(Error::EmptySeed);
+    }
+    if input_seed.len() > 10 {
+        return Err(Error::SeedToLong);
+    }
+    let mut processed_seed = String::new();
+    for &color in input_seed {
+        if !(0x_00_00_00 <= color && color <= 0x_FF_FF_FF) {
+            return Err(Error::InvalidSeedColor);
+        }
+        write!(&mut processed_seed, "{:06X},", color)?;
+    }
+    processed_seed.pop();
+    Ok(processed_seed)
 }
 
 /// Fetch the given `count` of colors from the Hexbot API.
 ///
 /// `count` must be between 1 and 1000.
-pub fn fetch(count: i32) -> Result<Hexbot, Error> {
-    if 1 <= count && count <= 1000 {
-        Ok(reqwest::get(&format!(
-            "https://api.noopschallenge.com/hexbot?count={}",
-            count
+pub fn fetch(count: i32, seed: Option<&[i32]>) -> Result<Hexbot, Error> {
+    if !(1 <= count && count <= 1000) {
+        return Err(Error::CountOutOfRange);
+    }
+    match seed {
+        None => Ok(reqwest::get(&format!("{}?count={}", API_ENDPOINT, count))?.json()?),
+        Some(seed) => Ok(reqwest::get(&format!(
+            "{}?count={}&seed={}",
+            API_ENDPOINT,
+            count,
+            parse_seed(seed)?
         ))?
-        .json()?)
-    } else {
-        Err(Error::CountOutOfRange)
+        .json()?),
     }
 }
 
@@ -187,19 +206,33 @@ pub fn fetch(count: i32) -> Result<Hexbot, Error> {
 ///  * `1 <= count <= 1,000`
 ///  * `10 <= width <= 100,000`
 ///  * `10 <= height <= 100,000`
-pub fn fetch_with_coordinates(count: i32, width: i32, height: i32) -> Result<Hexbot, Error> {
-    if 1 <= count && count <= 1000 {
-        if 10 <= width && width <= 100_000 && 10 <= height && height <= 100_000 {
-            Ok(reqwest::get(&format!(
-                "https://api.noopschallenge.com/hexbot?count={}&width={}&height={}",
-                count, width, height
-            ))?
-            .json()?)
-        } else {
-            Err(Error::WidthHeightOutOfRange)
-        }
-    } else {
-        Err(Error::CountOutOfRange)
+pub fn fetch_with_coordinates(
+    count: i32,
+    width: i32,
+    height: i32,
+    seed: Option<&[i32]>,
+) -> Result<Hexbot, Error> {
+    if !(1 <= count && count <= 1000) {
+        return Err(Error::CountOutOfRange);
+    }
+    if !(10 <= width && width <= 100_000) || !(10 <= height && height <= 100_000) {
+        return Err(Error::WidthHeightOutOfRange);
+    }
+    match seed {
+        None => Ok(reqwest::get(&format!(
+            "{}?count={}&width={}&height={}",
+            API_ENDPOINT, count, width, height
+        ))?
+        .json()?),
+        Some(seed) => Ok(reqwest::get(&format!(
+            "{}?count={}&width={}&height={},seed={}",
+            API_ENDPOINT,
+            count,
+            width,
+            height,
+            parse_seed(seed)?
+        ))?
+        .json()?),
     }
 }
 
@@ -210,20 +243,35 @@ pub fn fetch_with_coordinates(count: i32, width: i32, height: i32) -> Result<Hex
 pub enum Error {
     /// Contains a reqwest error
     Reqwest(reqwest::Error),
+    /// Contains `std::fmt::Error`.
+    Fmt(fmt::Error),
     /// Occurs when the count is higher then 1000 or lower then 1.
     CountOutOfRange,
     /// Occurs when width and/or height is higher then 100,000 or lower then 10.
     WidthHeightOutOfRange,
+    /// Occurs when the given seed is empty.
+    EmptySeed,
+    /// Occurs when the given seed has more than 10 colors.
+    SeedToLong,
+    /// Occurs when a color in seed is lower than 0 or higher then 0xFFFFFF.
+    InvalidSeedColor,
 }
 
 impl fmt::Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             Error::Reqwest(ref err) => err.fmt(f),
+            Error::Fmt(ref err) => err.fmt(f),
             Error::CountOutOfRange => write!(f, "count must be between 1 and 1000"),
             Error::WidthHeightOutOfRange => {
                 write!(f, "width and height must be between 10 and 100,000")
             }
+            Error::EmptySeed => write!(f, "seed must contain at least one color"),
+            Error::SeedToLong => write!(f, "seed must not contain more than 10 colors"),
+            Error::InvalidSeedColor => write!(
+                f,
+                "the i32 in seed must be between 0 and 16777215 (hex: FFFFFF)"
+            ),
         }
     }
 }
@@ -234,15 +282,26 @@ impl error::Error for Error {
     fn description(&self) -> &str {
         match self {
             Error::Reqwest(ref err) => err.description(),
+            Error::Fmt(ref err) => err.description(),
             Error::CountOutOfRange => "count must be between 1 and 1000",
             Error::WidthHeightOutOfRange => "width and height must be between 10 and 100,000",
+            Error::EmptySeed => "seed must contain at least one color",
+            Error::SeedToLong => "seed must not contain more than 10 colors",
+            Error::InvalidSeedColor => {
+                "the i32 in seed must be between 0 and 16777215 (hex: FFFFFF)"
+            }
         }
     }
 
     fn source(&self) -> Option<&(dyn error::Error + 'static)> {
         match self {
             Error::Reqwest(ref err) => err.source(),
-            Error::CountOutOfRange | Error::WidthHeightOutOfRange => None,
+            Error::Fmt(ref err) => err.source(),
+            Error::CountOutOfRange
+            | Error::WidthHeightOutOfRange
+            | Error::EmptySeed
+            | Error::SeedToLong
+            | Error::InvalidSeedColor => None,
         }
     }
 }
@@ -250,6 +309,12 @@ impl error::Error for Error {
 impl From<reqwest::Error> for Error {
     fn from(err: reqwest::Error) -> Self {
         Error::Reqwest(err)
+    }
+}
+
+impl From<fmt::Error> for Error {
+    fn from(err: fmt::Error) -> Self {
+        Error::Fmt(err)
     }
 }
 
@@ -317,29 +382,29 @@ mod tests {
     #[test]
     fn test_fetch() {
         // check that 0 results in Error::CountOutOfRange
-        assert!(match fetch(0) {
+        assert!(match fetch(0, None) {
             Err(Error::CountOutOfRange) => true,
             _ => false,
         });
         // check that 1001 results in Error::CountOutOfRange
-        assert!(match fetch(1001) {
+        assert!(match fetch(1001, None) {
             Err(Error::CountOutOfRange) => true,
             _ => false,
         });
         // check that 1 does not result in Error::CountOutOfRange
-        assert!(match fetch(1) {
+        assert!(match fetch(1, None) {
             Err(Error::CountOutOfRange) => false,
             _ => true,
         });
         // check that 1000 does not result in Error::CountOutOfRange
-        assert!(match fetch(1000) {
+        assert!(match fetch(1000, None) {
             Err(Error::CountOutOfRange) => false,
             _ => true,
         });
         // Check that the Ok() data type of fetch is hexbot.
-        // Note that this is not done during execution, it is done during compilation.
+        // NOTE: That this is done during compilation, not during execution.
         #[allow(unused_variables)]
-        match fetch(3) {
+        match fetch(3, None) {
             Ok(hb) => {
                 let hexbot: Hexbot = hb;
             }
