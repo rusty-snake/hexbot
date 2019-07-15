@@ -22,7 +22,7 @@ pub mod request_api;
 
 use request_api::{fetch, fetch_with_coordinates, Error};
 
-fn main() -> Result<(), Error>{
+fn main() -> Result<(), Error> {
     //
     // New hexbot with the parameter `count=20`.
     //
