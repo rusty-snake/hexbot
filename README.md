@@ -31,23 +31,20 @@ git clone https://github.com/rusty-snake/hexbot.git
 cd hexbot
 ```
 
-#### Stable code
-
-Should not be necessary because new features are created in separate branches and master only contains minor bugfixes or new versions. If it is still required: `git chekout v0.0.3` _or whatever the lastet version is_.
-
 ### Compile & Run
 
 ```
 $ cargo run --release
     Updating crates.io index
    ...
-   Compiling hexbot v0.0.6 (/home/rusty-snake/hexbot)
+   Compiling hexbot v0.0.7 (/home/rusty-snake/hexbot)
     Finished release [optimized] target(s) in 4m 2s
      Running `target/release/hexbot`
-A hexbot with five colors: [#1F13ED, #84769D, #4D052C, #8F64C5, #68C071]
-The sum of all red values: 487
-A hexbot with five colors and coordiantes: [#9A1184-(35|85), #C223F0-(95|79), #F7602A-(93|51), #9081C9-(48|51), #A18FAC-(12|50)]
-The second color at position (95|79) has a blue component of 0.94%.
+A hexbot with twenty colors: [#C75690, #B7901C, #138DC5, #D49BF9, #8D86A3, #E1FA17, #9F5F79, #1B6286, #BFA450, #CE9CC4, #4E4B50, #089803, #CB8240, #1E6ADC, #CE9239, #3FEE5B, #BF75B4, #F2DB6F, #848011, #7D91D2]
+The sum of all red values: 2840
+A hexbot with five colors and coordiantes: [#D24B3C-(43|54), #E5CDA4-(21|68), #8EDE32-(17|7), #FDC3D9-(53|0), #B7F77B-(57|13)]
+The second color at position (21|68) has a blue component of 0.64%.
+A hexbot with three hues of blue: [#0000DD, #0000E2, #0000E6]
 ```
 
 #### Compile only
@@ -89,23 +86,33 @@ pub mod request_api;
 // Example
 //
 
-use request_api::*;
+use request_api::{fetch, fetch_with_coordinates, Error};
 
-fn main {
-    let hexbot = fetch(5).unwrap();
-    println!("A hexbot with five colors: {}", hexbot);
+fn main() -> Result<(), Error> {
+    //
+    // New hexbot with the parameter `count=20`.
+    //
+    let hexbot = fetch(20, None)?;
+    println!("A hexbot with twenty colors: {}", hexbot);
+
+    // sum all red values
 
     let mut red_sum = 0;
     for color in hexbot.colors() {
-        red_sum += color.to_rgb255().0 as i32;
+        red_sum += i32::from(color.to_rgb255().0);
     }
     println!("The sum of all red values: {}", red_sum);
 
-    let hexbot_with_coordinates = fetch_with_coordinates(5, 100, 100).unwrap();
+    //
+    // New hexbot with the parameters `count=5&width=100&heigth=100`.
+    //
+    let hexbot_with_coordinates = fetch_with_coordinates(5, 100, 100, None)?;
     println!(
         "A hexbot with five colors and coordiantes: {}",
         hexbot_with_coordinates
     );
+
+    // Show the blue component of the second color and print its position.
 
     let coordinate = hexbot_with_coordinates.coordinates().unwrap()[1];
     let color = hexbot_with_coordinates.colors()[1];
@@ -115,6 +122,14 @@ fn main {
         x = coordinate.0,
         y = coordinate.1
     );
+
+    //
+    // New hexbot with the parameters `count=3&seed=000000,0000FF`.
+    //
+    let hexbot_blue_only = fetch(3, Some(&[0x_00_00_00, 0x_00_00_FF]))?;
+    println!("A hexbot with three hues of blue: {}", hexbot_blue_only);
+
+    Ok(())
 }
 ```
 
@@ -123,20 +138,18 @@ For the next steps, see the [documentation](#documentation).
 ## Changelog
 
 ```markdown
-## [0.0.6]
+## [0.0.7]
 ### Added
- * `Hexbot.clone()` (derive trait).
- * support for the width and height parameters of hexbot.
-   * `Hexbot.coordinates()`
-   * `Hexbot.has_coordinates()`
-   * `request_api::fetch_with_coordinates()`
-   * `Error::WidthHeightOutOfRange`
+ * more tests.
+ * support for hexbots `seed` parameter
+   * add `seed: Option<&[i32]>` to `fetch()` and `fetch_with_coordinates()`
+ * more Errors
+   * `Fmt(fmt::Error)`
+   * `EmptySeed`
+   * `SeedToLong`
+   * `InvalidSeedColor`
 
-### Changed
- * `fmt::Display` for `Hexbot`.
- * Improved docs & Hacking.
-
-[0.0.6]: https://github.com/rusty-snake/hexbot/tree/v0.0.6
+[0.0.7]: https://github.com/rusty-snake/hexbot/tree/v0.0.7
 ```
 
 For the full Changelog see [CHANGELOG.md](CHANGELOG.md).
