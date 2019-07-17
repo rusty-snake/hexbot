@@ -1,12 +1,15 @@
-# Hexbot :construction: <br> [![top lang]][rust] ![rust 2018] ![rustc 1.31+] [![GPLv3+]][COPYING] ![version]
+# Hexbot :construction: <br> [![top language: rust]][rust-lang] ![rust 2018] ![rustc 1.31+] [![GPLv3+]][COPYING] ![tag]
 
-[top lang]: https://img.shields.io/github/languages/top/rusty-snake/hexbot.svg?logo=rust
-[rust]: https://www.rust-lang.org/
-[rustc 1.31+]: https://img.shields.io/badge/rustc-1.31+-blue.svg
-[rust 2018]: https://img.shields.io/badge/rust--edition-2018-blue.svg
+[top language: rust]: https://img.shields.io/github/languages/top/rusty-snake/hexbot.svg?logo=rust
+[rust-lang]: https://www.rust-lang.org/
+[rustc 1.31+]: https://img.shields.io/badge/rustc-1.31+-blue.svg?logo=rust
+[rust 2018]: https://img.shields.io/badge/rust--edition-2018-blue.svg?logo=rust
 [GPLv3+]: https://img.shields.io/github/license/rusty-snake/hexbot.svg?color=darkred
 [COPYING]: COPYING
-[version]: https://img.shields.io/github/tag/rusty-snake/hexbot.svg?label=lastet%20release
+[tag]: https://img.shields.io/github/tag/rusty-snake/hexbot.svg
+
+[![Travis CI Status](https://badgen.net/travis/rusty-snake/hexbot/master?icon=travis&label=build)](https://travis-ci.com/rusty-snake/hexbot)
+[![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=rusty-snake/hexbot)](https://dependabot.com)
 
 My solution for: https://noopschallenge.com/challenges/hexbot
 
