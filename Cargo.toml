@@ -7,7 +7,7 @@ edition = "2018"
 license = "GPL-3.0-or-later"
 
 [dependencies]
-reqwest = "0.9.18"
+reqwest = "0.9.19"
 serde = { version = "1.0", default_features = false, features = ["derive"] }
 tint = "1.0.1"
 
