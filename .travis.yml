@@ -1,1 +1,6 @@
 language: rust
+dist: bionic
+cache: cargo
+branches:
+  except:
+   - /dependabot\/cargo\/.+/
