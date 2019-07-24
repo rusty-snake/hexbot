@@ -37,7 +37,7 @@ cd hexbot
 $ cargo run --release
     Updating crates.io index
    ...
-   Compiling hexbot v0.0.7 (/home/rusty-snake/hexbot)
+   Compiling hexbot v0.0.8 (/home/rusty-snake/hexbot)
     Finished release [optimized] target(s) in 4m 2s
      Running `target/release/hexbot`
 A hexbot with twenty colors: [#C75690, #B7901C, #138DC5, #D49BF9, #8D86A3, #E1FA17, #9F5F79, #1B6286, #BFA450, #CE9CC4, #4E4B50, #089803, #CB8240, #1E6ADC, #CE9239, #3FEE5B, #BF75B4, #F2DB6F, #848011, #7D91D2]
@@ -138,18 +138,15 @@ For the next steps, see the [documentation](#documentation).
 ## Changelog
 
 ```markdown
-## [0.0.7]
+## [0.0.8]
 ### Added
- * more tests.
- * support for hexbots `seed` parameter
-   * add `seed: Option<&[i32]>` to `fetch()` and `fetch_with_coordinates()`
- * more Errors
-   * `Fmt(fmt::Error)`
-   * `EmptySeed`
-   * `SeedToLong`
-   * `InvalidSeedColor`
+ * Support for error and message response
+ * `.rustfmt.toml`
 
-[0.0.7]: https://github.com/rusty-snake/hexbot/tree/v0.0.7
+### Changed
+ * Switch from openssl to rustls
+
+[0.0.8]: https://github.com/rusty-snake/hexbot/tree/v0.0.8
 ```
 
 For the full Changelog see [CHANGELOG.md](CHANGELOG.md).
