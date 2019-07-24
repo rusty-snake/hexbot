@@ -11,6 +11,8 @@ tint = "1.0.1"
 
 [dependencies.reqwest]
 version = "0.9"
+default_features = false
+features = ["rustls-tls"]
 
 [dependencies.serde]
 version = "1.0"

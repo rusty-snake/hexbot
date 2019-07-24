@@ -15,17 +15,14 @@ My solution for: https://noopschallenge.com/challenges/hexbot
 
 ## Installing
 
-### Dependencies (only for building)
+### Install [rust](https://www.rust-lang.org/)
 
-[rust](https://www.rust-lang.org/) (`cargo` and `rustc`), pkg-config, openssl
-
-| Distro                   | command(s)                                                                         |
-| ------------------------ | ---------------------------------------------------------------------------------- |
-| Arch Linux               | `sudo pacman -S rust openssl pkg-config`                                           |
-| Debian 9                 | `sudo apt install pkg-config libssl-dev`<br>`curl https://sh.rustup.rs -sSf \| sh` |
-| Debian 10+, Ubuntu, Mint | `sudo apt install cargo pkg-config libssl-dev`                                     |
-| Fedora                   | `sudo dnf install cargo openssl-devel pkg-config`                                  |
-| OpenSUSE                 | `sudo zypper install cargo openssl-devel pkg-config`                               |
+| Distro               | command(s)                  |
+| -------------------- | --------------------------- |
+| Arch Linux           | `sudo pacman -S rust`       |
+| Debian, Ubuntu, Mint | `sudo apt install cargo`    |
+| Fedora               | `sudo dnf install cargo`    |
+| OpenSUSE             | `sudo zypper install cargo` |
 
 ### Get the source code
 
