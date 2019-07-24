@@ -70,7 +70,7 @@ copy [`src/request_api.rs`](src/request_api.rs) into `src/request_api.rs` in you
 `Cargo.toml`:
 ```toml
 [dependencies]
-reqwest = "0.9.18"
+reqwest = "0.9"
 serde = { version = "1.0", default_features = false, features = ["derive"] }
 tint = "1.0.1"
 

@@ -7,9 +7,16 @@ edition = "2018"
 license = "GPL-3.0-or-later"
 
 [dependencies]
-reqwest = "0.9"
-serde = { version = "1.0", default_features = false, features = ["derive"] }
 tint = "1.0.1"
+
+[dependencies.reqwest]
+version = "0.9"
+
+[dependencies.serde]
+version = "1.0"
+default_features = false
+features = ["derive"]
+
 
 [features]
 # description() on Error types is deprecated, if you still need it add
