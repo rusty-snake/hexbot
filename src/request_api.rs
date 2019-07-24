@@ -75,13 +75,13 @@ use tint::Color;
 
 static API_ENDPOINT: &str = "https://api.noopschallenge.com/hexbot";
 
-#[derive(Clone, Copy, Debug, Deserialize, PartialEq)]
+#[derive(Clone, Copy, Debug, Deserialize, PartialEq, Eq)]
 struct Coordinate {
     x: i32,
     y: i32,
 }
 
-#[derive(Clone, Debug, Deserialize, PartialEq)]
+#[derive(Clone, Copy, Debug, Deserialize, PartialEq)]
 struct Dot {
     #[serde(rename = "value", deserialize_with = "deserialize_color")]
     color: Color,
@@ -89,7 +89,7 @@ struct Dot {
 }
 
 /// Deserialized response
-#[derive(Clone, Debug, Deserialize, PartialEq)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct Hexbot {
     colors: Vec<Dot>,
 }
@@ -156,6 +156,14 @@ impl fmt::Display for Hexbot {
     }
 }
 
+#[derive(Debug, Deserialize, PartialEq)]
+#[serde(rename_all = "lowercase")]
+enum ResponseKind {
+    Colors(Vec<Dot>),
+    Message(String),
+    Error(String),
+}
+
 fn deserialize_color<'de, D>(deser: D) -> Result<Color, D::Error>
 where
     D: Deserializer<'de>,
@@ -188,15 +196,20 @@ pub fn fetch(count: i32, seed: Option<&[i32]>) -> Result<Hexbot, Error> {
     if !(1 <= count && count <= 1000) {
         return Err(Error::CountOutOfRange);
     }
-    match seed {
-        None => Ok(reqwest::get(&format!("{}?count={}", API_ENDPOINT, count))?.json()?),
-        Some(seed) => Ok(reqwest::get(&format!(
+    let response: ResponseKind = match seed {
+        None => reqwest::get(&format!("{}?count={}", API_ENDPOINT, count))?.json()?,
+        Some(seed) => reqwest::get(&format!(
             "{}?count={}&seed={}",
             API_ENDPOINT,
             count,
             parse_seed(seed)?
         ))?
-        .json()?),
+        .json()?,
+    };
+    match response {
+        ResponseKind::Colors(colors) => Ok(Hexbot { colors }),
+        ResponseKind::Message(message) => Err(Error::HexbotMessage(message)),
+        ResponseKind::Error(error) => Err(Error::HexbotError(error)),
     }
 }
 
@@ -218,13 +231,13 @@ pub fn fetch_with_coordinates(
     if !(10 <= width && width <= 100_000) || !(10 <= height && height <= 100_000) {
         return Err(Error::WidthHeightOutOfRange);
     }
-    match seed {
-        None => Ok(reqwest::get(&format!(
+    let response: ResponseKind = match seed {
+        None => reqwest::get(&format!(
             "{}?count={}&width={}&height={}",
             API_ENDPOINT, count, width, height
         ))?
-        .json()?),
-        Some(seed) => Ok(reqwest::get(&format!(
+        .json()?,
+        Some(seed) => reqwest::get(&format!(
             "{}?count={}&width={}&height={},seed={}",
             API_ENDPOINT,
             count,
@@ -232,7 +245,12 @@ pub fn fetch_with_coordinates(
             height,
             parse_seed(seed)?
         ))?
-        .json()?),
+        .json()?,
+    };
+    match response {
+        ResponseKind::Colors(colors) => Ok(Hexbot { colors }),
+        ResponseKind::Message(message) => Err(Error::HexbotMessage(message)),
+        ResponseKind::Error(error) => Err(Error::HexbotError(error)),
     }
 }
 
@@ -245,6 +263,10 @@ pub enum Error {
     Reqwest(reqwest::Error),
     /// Contains `std::fmt::Error`.
     Fmt(fmt::Error),
+    /// Occurs wheb the Hexbot-API responded with a message.
+    HexbotMessage(String),
+    /// Occurs wheb the Hexbot-API responded with a error message.
+    HexbotError(String),
     /// Occurs when the count is higher then 1000 or lower then 1.
     CountOutOfRange,
     /// Occurs when width and/or height is higher then 100,000 or lower then 10.
@@ -260,8 +282,10 @@ pub enum Error {
 impl fmt::Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            Error::Reqwest(ref err) => err.fmt(f),
-            Error::Fmt(ref err) => err.fmt(f),
+            Error::Reqwest(err) => err.fmt(f),
+            Error::Fmt(err) => err.fmt(f),
+            Error::HexbotMessage(message) => write!(f, "responded with: {}", message),
+            Error::HexbotError(error) => write!(f, "responded with: {}", error),
             Error::CountOutOfRange => write!(f, "count must be between 1 and 1000"),
             Error::WidthHeightOutOfRange => {
                 write!(f, "width and height must be between 10 and 100,000")
@@ -281,8 +305,10 @@ impl error::Error for Error {
     #[cfg(ErrorDescription)]
     fn description(&self) -> &str {
         match self {
-            Error::Reqwest(ref err) => err.description(),
-            Error::Fmt(ref err) => err.description(),
+            Error::Reqwest(err) => err.description(),
+            Error::Fmt(err) => err.description(),
+            Error::HexbotMessage(message) => "responded with: " + message,
+            Error::HexbotError(error) => "responded with: " + error,
             Error::CountOutOfRange => "count must be between 1 and 1000",
             Error::WidthHeightOutOfRange => "width and height must be between 10 and 100,000",
             Error::EmptySeed => "seed must contain at least one color",
@@ -295,13 +321,15 @@ impl error::Error for Error {
 
     fn source(&self) -> Option<&(dyn error::Error + 'static)> {
         match self {
-            Error::Reqwest(ref err) => err.source(),
-            Error::Fmt(ref err) => err.source(),
+            Error::Reqwest(err) => err.source(),
+            Error::Fmt(err) => err.source(),
             Error::CountOutOfRange
             | Error::WidthHeightOutOfRange
             | Error::EmptySeed
             | Error::SeedToLong
-            | Error::InvalidSeedColor => None,
+            | Error::InvalidSeedColor
+            | Error::HexbotMessage(_)
+            | Error::HexbotError(_) => None,
         }
     }
 }
