@@ -17,7 +17,7 @@ My solution for: https://noopschallenge.com/challenges/hexbot
 
 ### Dependencies (only for building)
 
-cargo, rustc, pkg-config, openssl
+[rust](https://www.rust-lang.org/) (`cargo` and `rustc`), pkg-config, openssl
 
 | Distro                   | command(s)                                                                         |
 | ------------------------ | ---------------------------------------------------------------------------------- |

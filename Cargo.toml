@@ -1,13 +1,13 @@
 [package]
 name = "hexbot"
 description = "My solution for: https://noopschallenge.com/challenges/hexbot"
-version = "0.0.7"
+version = "0.0.8-dev"
 authors = ["rusty-snake <print_hello_world+Public@protonmail.com>"]
 edition = "2018"
 license = "GPL-3.0-or-later"
 
 [dependencies]
-reqwest = "0.9.19"
+reqwest = "0.9"
 serde = { version = "1.0", default_features = false, features = ["derive"] }
 tint = "1.0.1"
 

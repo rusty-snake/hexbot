@@ -75,13 +75,13 @@ use tint::Color;
 
 static API_ENDPOINT: &str = "https://api.noopschallenge.com/hexbot";
 
-#[derive(Clone, Copy, Debug, Deserialize, PartialEq)]
+#[derive(Clone, Copy, Debug, Deserialize, PartialEq, Eq)]
 struct Coordinate {
     x: i32,
     y: i32,
 }
 
-#[derive(Clone, Debug, Deserialize, PartialEq)]
+#[derive(Clone, Copy, Debug, Deserialize, PartialEq)]
 struct Dot {
     #[serde(rename = "value", deserialize_with = "deserialize_color")]
     color: Color,
@@ -295,8 +295,8 @@ impl error::Error for Error {
 
     fn source(&self) -> Option<&(dyn error::Error + 'static)> {
         match self {
-            Error::Reqwest(ref err) => err.source(),
-            Error::Fmt(ref err) => err.source(),
+            Error::Reqwest(err) => err.source(),
+            Error::Fmt(err) => err.source(),
             Error::CountOutOfRange
             | Error::WidthHeightOutOfRange
             | Error::EmptySeed
