@@ -3,15 +3,21 @@ os: linux
 dist: bionic
 sudo: false
 rust:
-  - 1.31
+  - 1.31.0
   - stable
   - beta
   - nightly
 install:
+  - rustup component add rustfmt
+  - rustup component add clippy
   - cargo fetch --verbose
 script:
   - cargo check --verbose
   - cargo test --verbose
+  - cargo clippy
+  - cargo fmt --verbose -- --check --verbose
 branches:
   except:
    - /dependabot\/cargo\/.+/
+git:
+  depth: 5
