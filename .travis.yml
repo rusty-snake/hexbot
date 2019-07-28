@@ -10,7 +10,9 @@ rust:
   #- nightly
 install:
   - rustup component add rustfmt
+  - rustfmt --version
   - rustup component add clippy
+  - clippy-driver --version
   - cargo fetch --verbose
 script:
   - cargo check --verbose
