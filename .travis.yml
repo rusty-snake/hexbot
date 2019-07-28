@@ -23,24 +23,24 @@ matrix:
       script:
         - cargo check --verbose
         - cargo test --verbose
-    - rust: nightly
-      install:
-        - cargo fetch --verbose
-      script:
-        - cargo check --verbose
-        - cargo test --verbose
-    - rust: 1.36.0
-      install:
-        - rustup component add rustfmt
-        - rustfmt --version
-      script:
-        - cargo fmt --verbose -- --check --verbose
-    - rust: 1.36.0
-      install:
-        - rustup component add clippy
-        - clippy-driver --version
-      script:
-        - cargo clippy
+#    - rust: nightly
+#      install:
+#        - cargo fetch --verbose
+#      script:
+#        - cargo check --verbose
+#        - cargo test --verbose
+#    - rust: 1.36.0
+#      install:
+#        - rustup component add rustfmt
+#        - rustfmt --version
+#      script:
+#        - cargo fmt --verbose -- --check --verbose
+#    - rust: 1.36.0
+#      install:
+#        - rustup component add clippy
+#        - clippy-driver --version
+#      script:
+#        - cargo clippy -D warnings
 branches:
   except:
    - /dependabot\/cargo\/.+/
