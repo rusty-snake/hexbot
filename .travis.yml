@@ -1,12 +1,13 @@
 language: rust
+cache: cargo
 os: linux
 dist: bionic
 sudo: false
 rust:
-  - 1.31.0
+  - 1.34.0
   - stable
   - beta
-  - nightly
+  #- nightly
 install:
   - rustup component add rustfmt
   - rustup component add clippy
@@ -14,7 +15,7 @@ install:
 script:
   - cargo check --verbose
   - cargo test --verbose
-  - cargo clippy
+  #- cargo clippy
   - cargo fmt --verbose -- --check --verbose
 branches:
   except:
