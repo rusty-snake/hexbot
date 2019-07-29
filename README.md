@@ -1,8 +1,8 @@
-# Hexbot :construction: <br> [![top language: rust]][rust-lang] ![rust 2018] ![rustc 1.31+] [![GPLv3+]][COPYING] ![tag]
+# Hexbot :construction: <br> [![top language: rust]][rust-lang] ![rust 2018] ![rustc 1.34+] [![GPLv3+]][COPYING] ![tag]
 
 [top language: rust]: https://img.shields.io/github/languages/top/rusty-snake/hexbot.svg?logo=rust
 [rust-lang]: https://www.rust-lang.org/
-[rustc 1.31+]: https://img.shields.io/badge/rustc-1.31+-blue.svg?logo=rust
+[rustc 1.34+]: https://img.shields.io/badge/rustc-1.34+-blue.svg?logo=rust
 [rust 2018]: https://img.shields.io/badge/rust--edition-2018-blue.svg?logo=rust
 [GPLv3+]: https://img.shields.io/github/license/rusty-snake/hexbot.svg?color=darkred
 [COPYING]: COPYING
