@@ -67,9 +67,17 @@ copy [`src/request_api.rs`](src/request_api.rs) into `src/request_api.rs` in you
 `Cargo.toml`:
 ```toml
 [dependencies]
-reqwest = "0.9"
-serde = { version = "1.0", default_features = false, features = ["derive"] }
 tint = "1.0.1"
+
+[dependencies.reqwest]
+version = "0.9"
+default_features = false
+features = ["rustls-tls"]
+
+[dependencies.serde]
+version = "1.0"
+default_features = false
+features = ["derive"]
 
 [features]
 # description() on Error types is deprecated, if you still need it add
