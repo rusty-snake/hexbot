@@ -10,6 +10,7 @@
 
 [![Travis CI Status](https://badgen.net/travis/rusty-snake/hexbot/master?icon=travis&label=build)](https://travis-ci.com/rusty-snake/hexbot)
 [![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=rusty-snake/hexbot)](https://dependabot.com)
+![](https://badgen.net/badge/maintenance/actively-developed/green)
 
 My solution for: https://noopschallenge.com/challenges/hexbot
 
