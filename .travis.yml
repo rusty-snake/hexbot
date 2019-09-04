@@ -9,7 +9,7 @@ rust:
 install:
   - cargo fetch --verbose
 script:
-  - cargo check --verbose
+  - cargo build --verbose
   - cargo test --verbose
 branches:
   except:

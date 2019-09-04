@@ -1,10 +1,13 @@
 [package]
 name = "hexbot"
+version = "0.0.9"
 description = "My solution for: https://noopschallenge.com/challenges/hexbot"
-version = "0.0.8-dev"
 authors = ["rusty-snake <print_hello_world+Public@protonmail.com>"]
-edition = "2018"
+repository = "https://github.com/rusty-snake/hexbot"
+readme = "README.md"
 license = "GPL-3.0-or-later"
+edition = "2018"
+keywords = ["hexbot", "noops-challenge"]
 
 [dependencies]
 tint = "1.0.1"

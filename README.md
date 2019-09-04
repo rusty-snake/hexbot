@@ -10,7 +10,7 @@
 
 [![Travis CI Status](https://badgen.net/travis/rusty-snake/hexbot/master?icon=travis&label=build)](https://travis-ci.com/rusty-snake/hexbot)
 [![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=rusty-snake/hexbot)](https://dependabot.com)
-![](https://badgen.net/badge/maintenance/actively-developed/green)
+![actively developed](https://badgen.net/badge/maintenance/actively-developed/green)
 
 My solution for: https://noopschallenge.com/challenges/hexbot
 
@@ -38,17 +38,17 @@ cd hexbot
 $ cargo run --release
     Updating crates.io index
    ...
-   Compiling hexbot v0.0.8 (/home/rusty-snake/hexbot)
+   Compiling hexbot v0.0.9 (/home/rusty-snake/hexbot)
     Finished release [optimized] target(s) in 4m 2s
      Running `target/release/hexbot`
-A hexbot with twenty colors: [#C75690, #B7901C, #138DC5, #D49BF9, #8D86A3, #E1FA17, #9F5F79, #1B6286, #BFA450, #CE9CC4, #4E4B50, #089803, #CB8240, #1E6ADC, #CE9239, #3FEE5B, #BF75B4, #F2DB6F, #848011, #7D91D2]
-The sum of all red values: 2840
-A hexbot with five colors and coordiantes: [#D24B3C-(43|54), #E5CDA4-(21|68), #8EDE32-(17|7), #FDC3D9-(53|0), #B7F77B-(57|13)]
-The second color at position (21|68) has a blue component of 0.64%.
-A hexbot with three hues of blue: [#0000DD, #0000E2, #0000E6]
+A hexbot with twenty colors: [#2A4F9D, #CFE0FC, #6801DD, #A70B33, #F4D8CD, #F41829, #EA0037, #38F496, #C7E8A9, #3A1CC5, #869FB2, #CC3A91, #FB1FFE, #FEAB77, #5168C1, #EBDF47, #D7608B, #AFBA33, #AD0A50, #A2F169]
+The sum of all red values: 3439
+A hexbot with five colors and coordiantes: [#AC83C4-(5|13), #EFFC3B-(5|18), #48AF07-(6|99), #B1B2B8-(48|80), #726B34-(19|66)]
+The second color at position (5|18) has a blue component of 0.23%.
+A hexbot with three hues of blue: [#000061, #0000A6, #000095]
 ```
 
-#### Compile only
+#### compile only
 
 ```
 $ cargo build --release
@@ -147,15 +147,12 @@ For the next steps, see the [documentation](#documentation).
 ## Changelog
 
 ```markdown
-## [0.0.8]
-### Added
- * Support for error and message response
- * `.rustfmt.toml`
+## [0.0.9] - 2019-09-04
+maintenance release
+ * fixing various non-code things
+ * updating dependencies
 
-### Changed
- * Switch from openssl to rustls
-
-[0.0.8]: https://github.com/rusty-snake/hexbot/tree/v0.0.8
+[0.0.9]: https://github.com/rusty-snake/hexbot/tree/v0.0.9
 ```
 
 For the full Changelog see [CHANGELOG.md](CHANGELOG.md).
