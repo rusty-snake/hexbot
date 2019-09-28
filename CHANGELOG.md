@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.10] - 2019-09-28
+### Changed
+ * min rustc: 1.37.0
+
+### Added
+  * library to use the hexbot API
+
+### Removed
+  * feature: `ErrorDescription`
+  * `src/request_api.rs`
+
 ## [0.0.9] - 2019-09-04
 maintenance release
  * fixing various non-code things
@@ -84,6 +95,7 @@ maintenance release
  - Support for requesting, parsing and printing a hexbot request without parameters.
  - All stuff around a project like README, LICENSE, .gitignore, ...
 
+[0.0.10]: https://github.com/rusty-snake/hexbot/tree/v0.0.10
 [0.0.9]: https://github.com/rusty-snake/hexbot/tree/v0.0.9
 [0.0.8]: https://github.com/rusty-snake/hexbot/tree/v0.0.8
 [0.0.7]: https://github.com/rusty-snake/hexbot/tree/v0.0.7

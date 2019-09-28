@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 rusty-snake <print_hello_world+License@protonmail.com>
+ * Copyright © 2019 rusty-snake <print_hello_world+License@protonmail.com>
  *
  * This file is part of rusty-snake's hexbot solution
  *
@@ -17,51 +17,69 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-// NOTE: needs to be `pub` so that the documentation will be created.
-pub mod request_api;
+use hexbot::{CoordinatesLimit, Count, Hexbot, Seed, WithCoordinates};
+use std::io;
+use std::io::Write;
 
-use request_api::{fetch, fetch_with_coordinates, Error};
+fn input(prompt: &str) -> io::Result<String> {
+    let mut buffer = String::new();
+    let mut stdout = io::stdout();
+    let stdin = io::stdin();
+    stdout.write_all(prompt.as_bytes())?;
+    stdout.flush()?;
+    stdin.read_line(&mut buffer)?;
+    Ok(buffer.trim().to_string())
+}
 
-fn main() -> Result<(), Error> {
-    //
-    // New hexbot with the parameter `count=20`.
-    //
-    let hexbot = fetch(20, None)?;
-    println!("A hexbot with twenty colors: {}", hexbot);
-
-    // sum all red values
-
-    let mut red_sum = 0;
-    for color in hexbot.colors() {
-        red_sum += i32::from(color.to_rgb255().0);
+fn ask_bool(question: &str) -> io::Result<bool> {
+    let answer = input(question)?.to_lowercase();
+    if answer == "y" || answer == "yes" {
+        Ok(true)
+    } else if answer == "n" || answer == "no" {
+        Ok(false)
+    } else {
+        println!("Sorry, try again.");
+        ask_bool(question)
     }
-    println!("The sum of all red values: {}", red_sum);
+}
 
-    //
-    // New hexbot with the parameters `count=5&width=100&heigth=100`.
-    //
-    let hexbot_with_coordinates = fetch_with_coordinates(5, 100, 100, None)?;
-    println!(
-        "A hexbot with five colors and coordiantes: {}",
-        hexbot_with_coordinates
-    );
+fn ask_i32(question: &str) -> io::Result<i32> {
+    if let Ok(answer) = input(question)?.parse() {
+        Ok(answer)
+    } else {
+        println!("Sorry, try again.");
+        ask_i32(question)
+    }
+}
 
-    // Show the blue component of the second color and print its position.
-
-    let coordinate = hexbot_with_coordinates.coordinates().unwrap()[1];
-    let color = hexbot_with_coordinates.colors()[1];
-    println!(
-        "The second color at position ({x}|{y}) has a blue component of {blue:.2}%.",
-        blue = color.blue,
-        x = coordinate.0,
-        y = coordinate.1
-    );
-
-    //
-    // New hexbot with the parameters `count=3&seed=000000,0000FF`.
-    //
-    let hexbot_blue_only = fetch(3, Some(&[0x_00_00_00, 0x_00_00_FF]))?;
-    println!("A hexbot with three hues of blue: {}", hexbot_blue_only);
-
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    println!("===== Hexbot =====");
+    let count = if ask_bool("Should the count parameter be added? [yes|no] ")? {
+        loop {
+            match Count::yes(ask_i32("What value should count have? [1-1000] ")?) {
+                Ok(count) => break count,
+                Err(_) => println!("This is a invalid count, try again."),
+            }
+        }
+    } else {
+        Count::no()
+    };
+    let with_coordinates =
+        if ask_bool("Should the width and height parameters be added? [yes|no] ")? {
+            WithCoordinates::yes(loop {
+                if let Ok(limit) = CoordinatesLimit::new(
+                    ask_i32("What value should width have? [10-100,000] ")?,
+                    ask_i32("What value should height have? [10-100,000] ")?,
+                ) {
+                    break limit;
+                } else {
+                    println!("This is a invalid width/height, try again.");
+                }
+            })
+        } else {
+            WithCoordinates::no()
+        };
+    let hb = Hexbot::fetch(count, with_coordinates, &Seed::no()).expect("Fetching failed");
+    println!("{}", hb);
     Ok(())
 }
