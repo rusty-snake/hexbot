@@ -51,8 +51,10 @@ use tint::Color;
 /// [API-doc]: https://github.com/noops-challenge/hexbot/blob/master/API.md
 #[derive(Clone, Copy, Debug, Deserialize, PartialEq)]
 pub struct Dot {
+    /// The color (hexbot: value)
     #[serde(rename = "value", deserialize_with = "deserialize_color")]
     pub color: Color,
+    /// The coordinates (if present)
     pub coordinates: Option<Coordinates>,
 }
 impl Dot {

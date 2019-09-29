@@ -86,13 +86,13 @@ impl Hexbot {
     ///     WithCoordinates::no(),
     ///     &Seed::no()
     /// )?;
-    /// // https://api.noopschallenge.com/hexbot?width=40&height=60
+    /// // https://api.noopschallenge.com/hexbot?&width=40&height=60
     /// let hb3 = Hexbot::fetch(
     ///     Count::no(),
     ///     WithCoordinates::yes(CoordinatesLimit::new(40, 60)?),
     ///     &Seed::no()
     /// )?;
-    /// // https://api.noopschallenge.com/hexbot?seed=B7410E,B22222
+    /// // https://api.noopschallenge.com/hexbot?&seed=B7410E,B22222
     /// let hb4 = Hexbot::fetch(
     ///     Count::no(),
     ///     WithCoordinates::no(),
@@ -122,7 +122,7 @@ impl Hexbot {
     ) -> Result<Self, reqwest::Error> {
         let count = match count.get() {
             None => String::new(),
-            Some(count) => format!("&count={}", count),
+            Some(count) => format!("count={}", count),
         };
         let coordinates = match __WidthHeight::get(&coordinates) {
             None => String::new(),
