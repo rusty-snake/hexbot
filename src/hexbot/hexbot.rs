@@ -17,7 +17,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-use crate::{Count, Dot, Seed, WithCoordinates};
+use crate::{Count, Dot, Seed, __WidthHeight};
 use serde::Deserialize;
 use std::{
     fmt::{self, Write},
@@ -62,6 +62,9 @@ pub struct Hexbot {
 #[allow(clippy::len_without_is_empty)] // Hexbot.colors should never be empty
 impl Hexbot {
     /// Creates a new instance of `Hexbot`
+    ///
+    /// `coordinates` can be [`WidthHeight`] or [`WithCoordinates`], but you should use
+    /// [`WidthHeight`].
     ///
     /// # Errors
     ///
@@ -109,21 +112,21 @@ impl Hexbot {
     /// )?;
     /// # Ok::<(), Box<dyn std::error::Error>>(())
     /// ```
+    ///
+    /// [`WidthHeight`]: struct.WidthHeight.html
+    /// [`WithCoordinates`]: struct.WithCoordinates.html
     pub fn fetch(
         count: Count,
-        coordinates: WithCoordinates,
+        coordinates: impl __WidthHeight,
         seed: &Seed,
     ) -> Result<Self, reqwest::Error> {
         let count = match count.get() {
             None => String::new(),
             Some(count) => format!("&count={}", count),
         };
-        let coordinates = match coordinates.limit() {
+        let coordinates = match __WidthHeight::get(&coordinates) {
             None => String::new(),
-            Some(coordinates) => {
-                let coordinates = coordinates.get();
-                format!("&width={}&height={}", coordinates.x, coordinates.y)
-            }
+            Some(coordinates) => format!("&width={}&height={}", coordinates.x, coordinates.y),
         };
         let seed = match seed.get() {
             None => String::new(),

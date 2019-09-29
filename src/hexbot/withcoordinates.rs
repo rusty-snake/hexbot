@@ -17,7 +17,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-use crate::CoordinatesLimit;
+use crate::{Coordinates, CoordinatesLimit};
 use std::fmt;
 
 /// Abstract representation of the `width` and the `height` parameter of the [hexbot-API].
@@ -113,5 +113,10 @@ impl fmt::Display for WithCoordinates {
             Some(limit) => write!(f, "{}", limit),
             None => write!(f, ""),
         }
+    }
+}
+impl crate::__WidthHeight for WithCoordinates {
+    fn get(&self) -> Option<Coordinates> {
+        Some(*(*self.limit())?.get())
     }
 }

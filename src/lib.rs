@@ -111,4 +111,17 @@ pub use crate::hexbot::{
     hexbot::Hexbot,
     seed::Seed,
     withcoordinates::WithCoordinates,
+    widthheight::WidthHeight,
 };
+
+#[doc(hidden)]
+pub trait __WidthHeight: private::Sealed {
+    fn get(&self) -> Option<Coordinates>;
+}
+
+#[allow(deprecated)]
+mod private {
+    pub trait Sealed {}
+    impl Sealed for crate::WidthHeight {}
+    impl Sealed for crate::WithCoordinates {}
+}

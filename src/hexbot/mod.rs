@@ -25,4 +25,5 @@ pub mod errors;
 #[allow(clippy::module_inception)]
 pub mod hexbot;
 pub mod seed;
+pub mod widthheight;
 pub mod withcoordinates;
