@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 ### Added
  * `Seed::add`
+ * impl ops::{Add,Sub} for Coordinates
 
 ## [0.0.10] - 2019-09-28
 ### Changed

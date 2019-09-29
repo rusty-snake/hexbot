@@ -18,7 +18,7 @@
  */
 
 use serde::Deserialize;
-use std::fmt;
+use std::{fmt, ops};
 
 /// Generic representation for coordinates with an x and a y value.
 ///
@@ -51,6 +51,20 @@ use std::fmt;
 /// println!("{}!", x + y );
 /// ```
 ///
+/// ```
+/// # use hexbot::Coordinates;
+/// let coordinates1 = Coordinates { x: 15, y: 30 };
+/// let coordinates2 = Coordinates { x: 15, y: 30 };
+/// assert_eq!(
+///     coordinates1 + coordinates2,
+///     Coordinates { x: 30, y: 60 }
+/// );
+/// assert_eq!(
+///     coordinates1 - coordinates2,
+///     Coordinates { x: 0, y: 0 }
+/// );
+/// ```
+///
 /// [`Hexbot`]: struct.Hexbot.html
 /// [`CoordinatesLimit`]: struct.CoordinatesLimit.html
 #[allow(missing_docs)]
@@ -62,5 +76,25 @@ pub struct Coordinates {
 impl fmt::Display for Coordinates {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "({}|{})", self.x, self.y)
+    }
+}
+impl ops::Add for Coordinates {
+    type Output = Self;
+
+    fn add(self, other: Self) -> Self {
+        Self {
+            x: self.x + other.x,
+            y: self.y + other.y,
+        }
+    }
+}
+impl ops::Sub for Coordinates {
+    type Output = Self;
+
+    fn sub(self, other: Self) -> Self {
+        Self {
+            x: self.x - other.x,
+            y: self.y - other.y,
+        }
     }
 }
