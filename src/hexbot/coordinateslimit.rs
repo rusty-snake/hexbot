@@ -17,6 +17,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+#![deprecated(since = "0.0.11", note = "Use WidthHeight instead.")]
+
 use crate::{errors::CoordinatesLimitOutOfRange, Coordinates};
 use std::{fmt, ops};
 

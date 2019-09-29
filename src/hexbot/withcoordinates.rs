@@ -17,6 +17,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+#![deprecated(since = "0.0.11", note = "Use WidthHeight instead.")]
+// Don't warn about CoordinatesLimit
+#![allow(deprecated)]
+
 use crate::{Coordinates, CoordinatesLimit};
 use std::fmt;
 

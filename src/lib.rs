@@ -102,6 +102,8 @@ mod hexbot;
 
 pub use tint::Color;
 #[rustfmt::skip]
+// Don't warn about CoordinatesLimit and WithCoordinates
+#[allow(deprecated)]
 pub use crate::hexbot::{
     coordinates::Coordinates,
     coordinateslimit::CoordinatesLimit,

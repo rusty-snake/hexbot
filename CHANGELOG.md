@@ -10,6 +10,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
  * impl ops::{Add,Sub} for Coordinates
  * `hexbot::WidthHeight` improved replacement for `WithCoordinates` and `CoordinatesLimit`
 
+### Changed
+ * `Hexbot::fetch` accept both `WithCoordinates` and `WidthHeight`
+
+### Deprecated
+ * `WithCoordinates` use `WidthHeight`
+ * `CoordinatesLimit` use `WidthHeight`
+
 ## [0.0.10] - 2019-09-28
 ### Changed
  * min rustc: 1.37.0
