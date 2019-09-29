@@ -153,6 +153,60 @@ impl Seed {
     pub fn get(&self) -> &Option<String> {
         &self.0
     }
+
+    /// Add a color to an existing `Seed`.
+    ///
+    /// # Errors
+    ///
+    /// [`SeedError`] (same as [`new`]):
+    ///  - [`SeedError::ToLong`] occurs if the seed already has 10 colors.
+    ///  - [`SeedError::NoColor`] occurs if `color` isn't a valid color.
+    ///    A valid color in a number between 0 (`0x_00_00_00`) and 16777215 (`0x_FF_FF_FF`).  
+    ///    **This variant will change in the future to `NoColor(i32)`.**
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// # use hexbot::*;
+    /// let mut seed = Seed::new(&[0x_11_11_00, 0x_FF_FF_00, 0x_FF_A5_00])?;
+    /// seed.add(0x_AA_00_AA)?;
+    /// assert_eq!(
+    ///     seed.get(),
+    ///     &Some(String::from("111100,FFFF00,FFA500,AA00AA"))
+    /// );
+    ///
+    /// let mut seed = Seed::no();
+    /// seed.add(0x_AA_00_AA)?;
+    /// seed.add(0x_AB_CD_EF)?;
+    /// assert_eq!(
+    ///     seed.get(),
+    ///     &Some(String::from("AA00AA,ABCDEF"))
+    /// );
+    /// # Ok::<(), Box<dyn std::error::Error>>(())
+    /// ```
+    ///
+    /// ```compile_fail
+    /// # use hexbot::*;
+    /// // seed must be mutable
+    /// let seed = Seed::new(&[0x_22_22_00, 0x_99_99_00])?;
+    /// seed.add(0x_01_23_45)?;
+    /// # Ok::<(), Box<dyn std::error::Error>>(())
+    /// ```
+    ///
+    /// [`new`]: #method.new
+    /// [`SeedError`]: errors/enum.SeedError.html
+    /// [`SeedError::ToLong`]: errors/enum.SeedError.html#variant.ToLong
+    /// [`SeedError::NoColor`]: errors/enum.SeedError.html#variant.NoColor
+    pub fn add(&mut self, color: i32) -> Result<(), SeedError> {
+        if color < 0x_00_00_00 || color > 0x_FF_FF_FF {
+            return Err(SeedError::NoColor);
+        }
+        match self.0 {
+            Some(ref mut seed) => write!(seed, ",{:06X}", color).unwrap(),
+            None => self.0 = Some(Self::new(&[color])?.0.unwrap()),
+        };
+        Ok(())
+    }
 }
 impl fmt::Display for Seed {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
