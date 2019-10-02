@@ -17,7 +17,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-use hexbot::{CoordinatesLimit, Count, Hexbot, Seed, WithCoordinates};
+use hexbot::{Count, Hexbot, Seed, WidthHeight};
 use std::io;
 use std::io::Write;
 
@@ -66,18 +66,17 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     };
     let with_coordinates =
         if ask_bool("Should the width and height parameters be added? [yes|no] ")? {
-            WithCoordinates::yes(loop {
-                if let Ok(limit) = CoordinatesLimit::new(
+            loop {
+                match WidthHeight::yes(
                     ask_i32("What value should width have? [10-100,000] ")?,
                     ask_i32("What value should height have? [10-100,000] ")?,
                 ) {
-                    break limit;
-                } else {
-                    println!("This is a invalid width/height, try again.");
+                    Ok(limit) => break limit,
+                    Err(_) => println!("This is a invalid width/height, try again."),
                 }
-            })
+            }
         } else {
-            WithCoordinates::no()
+            WidthHeight::no()
         };
     let hb = Hexbot::fetch(count, with_coordinates, &Seed::no()).expect("Fetching failed");
     println!("{}", hb);
