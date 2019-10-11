@@ -35,7 +35,7 @@ const API_ENDPOINT: &str = "https://api.noopschallenge.com/hexbot?";
 /// # use hexbot::*;
 /// let hb = Hexbot::fetch(
 ///     Count::yes(50)?,
-///     WithCoordinates::no(),
+///     WidthHeight::no(),
 ///     &Seed::no()
 /// )?;
 ///
@@ -77,37 +77,37 @@ impl Hexbot {
     /// // https://api.noopschallenge.com/hexbot?
     /// let hb1 = Hexbot::fetch(
     ///     Count::no(),
-    ///     WithCoordinates::no(),
+    ///     WidthHeight::no(),
     ///     &Seed::no()
     /// )?;
     /// // https://api.noopschallenge.com/hexbot?count=100
     /// let hb2 = Hexbot::fetch(
     ///     Count::yes(100)?,
-    ///     WithCoordinates::no(),
+    ///     WidthHeight::no(),
     ///     &Seed::no()
     /// )?;
     /// // https://api.noopschallenge.com/hexbot?&width=40&height=60
     /// let hb3 = Hexbot::fetch(
     ///     Count::no(),
-    ///     WithCoordinates::yes(CoordinatesLimit::new(40, 60)?),
+    ///     WidthHeight::yes(40, 60)?,
     ///     &Seed::no()
     /// )?;
     /// // https://api.noopschallenge.com/hexbot?&seed=B7410E,B22222
     /// let hb4 = Hexbot::fetch(
     ///     Count::no(),
-    ///     WithCoordinates::no(),
+    ///     WidthHeight::no(),
     ///     &Seed::new(&[0x_B7_41_0E, 0x_B2_22_22])?
     /// )?;
     /// // https://api.noopschallenge.com/hexbot?count=70&width=400&height=400
     /// let hb5 = Hexbot::fetch(
     ///     Count::yes(70)?,
-    ///     WithCoordinates::yes(CoordinatesLimit::new(400, 400)?),
+    ///     WidthHeight::yes(400, 400)?,
     ///     &Seed::no()
     /// )?;
     /// // https://api.noopschallenge.com/hexbot?count=1000&width=10&height=10
     /// let hb6 = Hexbot::fetch(
     ///     Count::max(),
-    ///     WithCoordinates::yes(CoordinatesLimit::min()),
+    ///     WidthHeight::min(),
     ///     &Seed::no()
     /// )?;
     /// # Ok::<(), Box<dyn std::error::Error>>(())
@@ -141,7 +141,7 @@ impl Hexbot {
     /// # use hexbot::*;
     /// let hb = Hexbot::fetch(
     ///     Count::yes(3)?,
-    ///     WithCoordinates::no(),
+    ///     WidthHeight::no(),
     ///     &Seed::new(&[0x_FF_FF_FF])?
     /// )
     /// .expect("Fetching failed");
@@ -164,7 +164,7 @@ impl Hexbot {
     /// # use hexbot::*;
     /// let hb = Hexbot::fetch(
     ///     Count::no(),
-    ///     WithCoordinates::no(),
+    ///     WidthHeight::no(),
     ///     &Seed::new(&[0x_AB_CD_EF])?
     /// )
     /// .expect("Fetching failed");
@@ -190,7 +190,7 @@ impl Hexbot {
     /// # use hexbot::*;
     /// let hexbot_with_coordinates = Hexbot::fetch(
     ///     Count::yes(6)?,
-    ///     WithCoordinates::yes(CoordinatesLimit::new(20, 20)?),
+    ///     WidthHeight::yes(20, 20)?,
     ///     &Seed::no()
     /// )
     /// .expect("Fetching failed");
@@ -198,7 +198,7 @@ impl Hexbot {
     ///
     /// let hexbot_without_coordinates = Hexbot::fetch(
     ///      Count::yes(6)?,
-    ///      WithCoordinates::no(),
+    ///      WidthHeight::no(),
     ///      &Seed::no()
     /// )
     /// .expect("Fetching failed");
@@ -217,7 +217,7 @@ impl Hexbot {
     /// # use hexbot::*;
     /// let hb = Hexbot::fetch(
     ///     Count::yes(5)?,
-    ///     WithCoordinates::no(),
+    ///     WidthHeight::no(),
     ///     &Seed::no()
     /// )
     /// .expect("Fetching failed");
@@ -225,7 +225,7 @@ impl Hexbot {
     ///
     /// let hb = Hexbot::fetch(
     ///     Count::no(),
-    ///     WithCoordinates::yes(CoordinatesLimit::new(500, 500)?),
+    ///     WidthHeight::yes(500, 500)?,
     ///     &Seed::no()
     /// )
     /// .expect("Fetching failed");
@@ -242,7 +242,7 @@ impl Hexbot {
     /// # use hexbot::*;
     /// let hb = Hexbot::fetch(
     ///     Count::yes(5)?,
-    ///     WithCoordinates::no(),
+    ///     WidthHeight::no(),
     ///     &Seed::new(&[0x_00_AA_00])?
     /// )
     /// .expect("Fetching failed");
@@ -258,7 +258,7 @@ impl Hexbot {
     /// # use hexbot::*;
     /// let hb = Hexbot::fetch(
     ///     Count::yes(5)?,
-    ///     WithCoordinates::no(),
+    ///     WidthHeight::no(),
     ///     &Seed::new(&[0x_00_AA_00])?
     /// )
     /// .expect("Fetching failed");
@@ -277,7 +277,7 @@ impl Hexbot {
     /// # use hexbot::*;
     /// let hexbot = Hexbot::fetch(
     ///     Count::yes(5)?,
-    ///     WithCoordinates::no(),
+    ///     WidthHeight::no(),
     ///     &Seed::new(&[0x_00_00_FF])?
     /// )
     /// .expect("Fetching failed");

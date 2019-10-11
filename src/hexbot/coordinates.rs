@@ -30,7 +30,7 @@ use std::{fmt, ops};
 /// # use hexbot::*;
 /// let hb = Hexbot::fetch(
 ///     Count::yes(3)?,
-///     WithCoordinates::yes(CoordinatesLimit::min()),
+///     WidthHeight::min(),
 ///     &Seed::no()
 /// )
 /// .expect("Fetching failed");

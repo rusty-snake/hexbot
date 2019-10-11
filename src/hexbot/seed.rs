@@ -29,14 +29,14 @@ use std::fmt::{self, Write};
 /// // Fetch a Hexbot with this seed: `00FFFF,0000FF,008B8B,00008B`.
 /// let hb = Hexbot::fetch(
 ///     Count::no(),
-///     WithCoordinates::no(),
+///     WidthHeight::no(),
 ///     &Seed::new(&[0x_00_FF_FF, 0x_00_00_FF, 0x_00_8B_8B, 0x_00_00_8B])?
 /// )?;
 ///
 /// // Don't add the `seed` parameter to the request.
 /// let hb = Hexbot::fetch(
 ///     Count::no(),
-///     WithCoordinates::no(),
+///     WidthHeight::no(),
 ///     &Seed::no()
 /// )?;
 /// # Ok::<(), Box<dyn std::error::Error>>(())

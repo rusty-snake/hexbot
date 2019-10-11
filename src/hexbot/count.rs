@@ -29,7 +29,7 @@ use std::{fmt, ops};
 /// // Fetch a Hexbot with 500 colors.
 /// let hb = Hexbot::fetch(
 ///     Count::yes(500)?,
-///     WithCoordinates::no(),
+///     WidthHeight::no(),
 ///     &Seed::no()
 /// )?;
 /// # assert_eq!(hb.len(), 500);
@@ -37,7 +37,7 @@ use std::{fmt, ops};
 /// // Don't add the `count` parameter to the request.
 /// let hb = Hexbot::fetch(
 ///     Count::no(),
-///     WithCoordinates::no(),
+///     WidthHeight::no(),
 ///     &Seed::no()
 /// )?;
 /// # assert_eq!(hb.len(), 1);

@@ -30,7 +30,7 @@ use tint::Color;
 /// # use hexbot::*;
 /// let hb1 = Hexbot::fetch(
 ///     Count::yes(5)?,
-///     WithCoordinates::no(),
+///     WidthHeight::no(),
 ///     &Seed::new(&[0x_B7_41_0E])?
 /// )
 /// .expect("Fetching failed");
@@ -39,7 +39,7 @@ use tint::Color;
 ///
 /// let hb2 = Hexbot::fetch(
 ///     Count::yes(5)?,
-///     WithCoordinates::yes(CoordinatesLimit::new(2500, 4000)?),
+///     WidthHeight::yes(2500, 4000)?,
 ///     &Seed::no()
 /// )
 /// .expect("Fetching failed");
@@ -64,7 +64,7 @@ impl Dot {
     /// # use hexbot::*;
     /// let hexbot_without_coordinates = Hexbot::fetch(
     ///     Count::no(),
-    ///     WithCoordinates::no(),
+    ///     WidthHeight::no(),
     ///     &Seed::no()
     /// )
     /// .expect("Fetching failed");
@@ -73,7 +73,7 @@ impl Dot {
     ///
     /// let hexbot_with_coordinates = Hexbot::fetch(
     ///     Count::no(),
-    ///     WithCoordinates::yes(CoordinatesLimit::new(20, 20)?),
+    ///     WidthHeight::yes(20, 20)?,
     ///     &Seed::no()
     /// )
     /// .expect("Fetching failed");
