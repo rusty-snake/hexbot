@@ -53,9 +53,8 @@ impl Seed {
     /// The error type [`SeedError`] has three types:
     ///  - [`SeedError::Empty`] occurs if `colors` is an empty slice.
     ///  - [`SeedError::ToLong`] occurs if `colors` has 11 or more elements.
-    ///  - [`SeedError::NoColor`] occurs if an element in `colors` isn't a valid color.
+    ///  - [`SeedError::NoColor(color)`] occurs if an element in `colors` isn't a valid color.
     ///    A valid color in a number between 0 (`0x_00_00_00`) and 16777215 (`0x_FF_FF_FF`).  
-    ///    **This variant will change in the future to `NoColor(i32)` which contains the bad
     ///    element.**
     ///
     /// ## Examples
@@ -89,7 +88,7 @@ impl Seed {
     /// [`SeedError`]: errors/enum.SeedError.html
     /// [`SeedError::Empty`]: errors/enum.SeedError.html#variant.Empty
     /// [`SeedError::ToLong`]: errors/enum.SeedError.html#variant.ToLong
-    /// [`SeedError::NoColor`]: errors/enum.SeedError.html#variant.NoColor
+    /// [`SeedError::NoColor(color)`]: errors/enum.SeedError.html#variant.NoColor
     pub fn new(colors: &[i32]) -> Result<Self, SeedError> {
         if colors.is_empty() {
             return Err(SeedError::Empty);
@@ -102,7 +101,7 @@ impl Seed {
             if 0x_00_00_00 <= *color && *color <= 0x_FF_FF_FF {
                 write!(&mut seed, "{:06X},", color).unwrap();
             } else {
-                return Err(SeedError::NoColor);
+                return Err(SeedError::NoColor(*color));
             }
         }
         seed.pop();
@@ -160,9 +159,8 @@ impl Seed {
     ///
     /// [`SeedError`] (same as [`new`]):
     ///  - [`SeedError::ToLong`] occurs if the seed already has 10 colors.
-    ///  - [`SeedError::NoColor`] occurs if `color` isn't a valid color.
+    ///  - [`SeedError::NoColor(color)`] occurs if `color` isn't a valid color.
     ///    A valid color in a number between 0 (`0x_00_00_00`) and 16777215 (`0x_FF_FF_FF`).  
-    ///    **This variant will change in the future to `NoColor(i32)`.**
     ///
     /// # Examples
     ///
@@ -196,10 +194,10 @@ impl Seed {
     /// [`new`]: #method.new
     /// [`SeedError`]: errors/enum.SeedError.html
     /// [`SeedError::ToLong`]: errors/enum.SeedError.html#variant.ToLong
-    /// [`SeedError::NoColor`]: errors/enum.SeedError.html#variant.NoColor
+    /// [`SeedError::NoColor(color)`]: errors/enum.SeedError.html#variant.NoColor
     pub fn add(&mut self, color: i32) -> Result<(), SeedError> {
         if color < 0x_00_00_00 || color > 0x_FF_FF_FF {
-            return Err(SeedError::NoColor);
+            return Err(SeedError::NoColor(color));
         }
         match self.0 {
             Some(ref mut seed) => write!(seed, ",{:06X}", color).unwrap(),

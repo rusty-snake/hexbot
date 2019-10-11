@@ -56,8 +56,7 @@ impl fmt::Display for CoordinatesLimitOutOfRange {
 pub enum SeedError {
     Empty,
     ToLong,
-    /// **This variant will change in the future to `NoColor(i32)`.**
-    NoColor,
+    NoColor(i32),
 }
 impl StdError for SeedError {}
 impl fmt::Display for SeedError {
@@ -65,7 +64,7 @@ impl fmt::Display for SeedError {
         match self {
             Self::Empty => write!(f, "The given seed was an empty slice."),
             Self::ToLong => write!(f, "The given seed had 11 or more colors."),
-            Self::NoColor => write!(f, "A given color wasn't a color."),
+            Self::NoColor(_) => write!(f, "A given color wasn't a color."),
         }
     }
 }
