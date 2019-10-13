@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+## [0.0.11] - 2019-10-13
 ### Added
  * `Seed::add`
  * impl ops::{Add,Sub} for Coordinates
@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
  * `Hexbot::fetch` accept both `WithCoordinates` and `WidthHeight`
+ * old:`SeedError::NoColor` new:`SeedError::NoColor(i32)`
 
 ### Deprecated
  * `WithCoordinates` use `WidthHeight`
@@ -108,6 +109,7 @@ maintenance release
  - Support for requesting, parsing and printing a hexbot request without parameters.
  - All stuff around a project like README, LICENSE, .gitignore, ...
 
+[0.0.11]: https://github.com/rusty-snake/hexbot/tree/v0.0.11
 [0.0.10]: https://github.com/rusty-snake/hexbot/tree/v0.0.10
 [0.0.9]: https://github.com/rusty-snake/hexbot/tree/v0.0.9
 [0.0.8]: https://github.com/rusty-snake/hexbot/tree/v0.0.8

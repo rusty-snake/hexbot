@@ -51,7 +51,7 @@ cd hexbot
 $ cargo run --release
     Updating crates.io index
    ...
-   Compiling hexbot v0.0.10 (/home/rusty-snake/hexbot)
+   Compiling hexbot v0.0.11 (/home/rusty-snake/hexbot)
     Finished release [optimized] target(s) in 4m 2s
      Running `target/release/hexbot`
 ===== Hexbot =====
@@ -82,17 +82,17 @@ Using the hexbot library in your own project.
 `Cargo.toml`:
 ```toml
 [dependencies]
-hexbot = { git = "https://github.com/rusty-snake/hexbot", tag = "v0.0.10" }
+hexbot = { git = "https://github.com/rusty-snake/hexbot", tag = "v0.0.11" }
 ```
 
 `src/main.rs`:
 ```rust
-use hexbot::{Count, Hexbot, Seed, WithCoordinates};
+use hexbot::{Count, Hexbot, Seed, WidthHeight};
 
 fn main() {
     let hb = Hexbot::fetch(
         Count::no(),
-        WithCoordinates::no(),
+        WidthHeight::no(),
         &Seed::no()
     );
     println!("Hello from Hexbot: {}", hb);
@@ -104,18 +104,21 @@ For the next steps, see the [documentation](#documentation).
 ## Changelog
 
 ```markdown
-## [0.0.10] - 2019-09-28
-### Changed
- * min rustc: 1.37.0
-
+## [0.0.11] - 2019-10-13
 ### Added
-  * library to use the hexbot API
+ * `Seed::add`
+ * impl ops::{Add,Sub} for Coordinates
+ * `hexbot::WidthHeight` improved replacement for `WithCoordinates` and `CoordinatesLimit`
 
-### Removed
-  * feature: `ErrorDescription`
-  * `src/request_api.rs`
+### Changed
+ * `Hexbot::fetch` accept both `WithCoordinates` and `WidthHeight`
+ * old:`SeedError::NoColor` new:`SeedError::NoColor(i32)`
 
-[0.0.10]: https://github.com/rusty-snake/hexbot/tree/v0.0.10
+### Deprecated
+ * `WithCoordinates` use `WidthHeight`
+ * `CoordinatesLimit` use `WidthHeight`
+
+[0.0.11]: https://github.com/rusty-snake/hexbot/tree/v0.0.11
 ```
 
 For the full Changelog see [CHANGELOG.md](CHANGELOG.md).
