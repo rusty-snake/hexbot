@@ -1,5 +1,5 @@
 /*
- * Copyright © 2019 rusty-snake <print_hello_world+License@protonmail.com>
+ * Copyright © 2019,2020 rusty-snake <print_hello_world+License@protonmail.com>
  *
  * This file is part of rusty-snake's hexbot solution
  *
@@ -17,7 +17,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-use crate::{Count, Dot, Seed, __WidthHeight};
+use crate::{Count, Dot, Seed, WidthHeight};
 use serde::Deserialize;
 use std::{
     fmt::{self, Write},
@@ -33,11 +33,12 @@ const API_ENDPOINT: &str = "https://api.noopschallenge.com/hexbot?";
 ///
 /// ```no_run
 /// # use hexbot::*;
+/// # async {
 /// let hb = Hexbot::fetch(
 ///     Count::yes(50)?,
 ///     WidthHeight::no(),
 ///     &Seed::no()
-/// )?;
+/// ).await?;
 ///
 /// println!("The first color: {}.", hb.color_at(0).unwrap().to_hex());
 /// println!("The last color: {}.", hb.color_at(hb.len() - 1).unwrap().to_hex());
@@ -54,6 +55,7 @@ const API_ENDPOINT: &str = "https://api.noopschallenge.com/hexbot?";
 /// }
 ///
 /// # Ok::<(), Box<dyn std::error::Error>>(())
+/// # };
 /// ```
 #[derive(Clone, Debug, Deserialize, PartialEq)]
 pub struct Hexbot {
@@ -74,57 +76,59 @@ impl Hexbot {
     ///
     /// ```no_run
     /// # use hexbot::*;
+    /// # async {
     /// // https://api.noopschallenge.com/hexbot?
     /// let hb1 = Hexbot::fetch(
     ///     Count::no(),
     ///     WidthHeight::no(),
     ///     &Seed::no()
-    /// )?;
+    /// ).await?;
     /// // https://api.noopschallenge.com/hexbot?count=100
     /// let hb2 = Hexbot::fetch(
     ///     Count::yes(100)?,
     ///     WidthHeight::no(),
     ///     &Seed::no()
-    /// )?;
+    /// ).await?;
     /// // https://api.noopschallenge.com/hexbot?&width=40&height=60
     /// let hb3 = Hexbot::fetch(
     ///     Count::no(),
     ///     WidthHeight::yes(40, 60)?,
     ///     &Seed::no()
-    /// )?;
+    /// ).await?;
     /// // https://api.noopschallenge.com/hexbot?&seed=B7410E,B22222
     /// let hb4 = Hexbot::fetch(
     ///     Count::no(),
     ///     WidthHeight::no(),
     ///     &Seed::new(&[0x_B7_41_0E, 0x_B2_22_22])?
-    /// )?;
+    /// ).await?;
     /// // https://api.noopschallenge.com/hexbot?count=70&width=400&height=400
     /// let hb5 = Hexbot::fetch(
     ///     Count::yes(70)?,
     ///     WidthHeight::yes(400, 400)?,
     ///     &Seed::no()
-    /// )?;
+    /// ).await?;
     /// // https://api.noopschallenge.com/hexbot?count=1000&width=10&height=10
     /// let hb6 = Hexbot::fetch(
     ///     Count::max(),
     ///     WidthHeight::min(),
     ///     &Seed::no()
-    /// )?;
+    /// ).await?;
     /// # Ok::<(), Box<dyn std::error::Error>>(())
+    /// # };
     /// ```
     ///
     /// [`WidthHeight`]: struct.WidthHeight.html
     /// [`WithCoordinates`]: struct.WithCoordinates.html
-    pub fn fetch(
+    pub async fn fetch(
         count: Count,
-        coordinates: impl __WidthHeight,
+        coordinates: WidthHeight,
         seed: &Seed,
     ) -> Result<Self, reqwest::Error> {
         let count = match count.get() {
             None => String::new(),
             Some(count) => format!("count={}", count),
         };
-        let coordinates = match __WidthHeight::get(&coordinates) {
+        let coordinates = match coordinates.get() {
             None => String::new(),
             Some(coordinates) => format!("&width={}&height={}", coordinates.x, coordinates.y),
         };
@@ -132,18 +136,22 @@ impl Hexbot {
             None => String::new(),
             Some(seed) => format!("&seed={}", seed),
         };
-        reqwest::get(&format!("{}{}{}{}", API_ENDPOINT, count, coordinates, seed))?.json()
+        reqwest::get(&format!("{}{}{}{}", API_ENDPOINT, count, coordinates, seed))
+            .await?
+            .json()
+            .await
     }
 
     /// Returns a reference to a [`Color`] or `None` if out of bounds.
     ///
     /// ```no_run
     /// # use hexbot::*;
+    /// # async {
     /// let hb = Hexbot::fetch(
     ///     Count::yes(3)?,
     ///     WidthHeight::no(),
     ///     &Seed::new(&[0x_FF_FF_FF])?
-    /// )
+    /// ).await
     /// .expect("Fetching failed");
     ///
     /// println!("The first color is {}.", hb.color_at(0).unwrap().to_hex());
@@ -151,6 +159,7 @@ impl Hexbot {
     /// assert_eq!(hb.color_at(2), Some(&Color::from("#FFFFFF")));
     /// assert_eq!(hb.color_at(3), None);
     /// # Ok::<(), Box<dyn std::error::Error>>(())
+    /// # };
     /// ```
     ///
     /// [`Color`]: struct.Color.html
@@ -162,11 +171,12 @@ impl Hexbot {
     ///
     /// ```no_run
     /// # use hexbot::*;
+    /// # async {
     /// let hb = Hexbot::fetch(
     ///     Count::no(),
     ///     WidthHeight::no(),
     ///     &Seed::new(&[0x_AB_CD_EF])?
-    /// )
+    /// ).await
     /// .expect("Fetching failed");
     ///
     /// assert_eq!(
@@ -175,6 +185,7 @@ impl Hexbot {
     /// );
     /// assert_eq!(hb.dot_at(1), None);
     /// # Ok::<(), Box<dyn std::error::Error>>(())
+    /// # };
     /// ```
     ///
     /// [`Dot`]: struct.Dot.html
@@ -188,11 +199,12 @@ impl Hexbot {
     ///
     /// ```no_run
     /// # use hexbot::*;
+    /// # async {
     /// let hexbot_with_coordinates = Hexbot::fetch(
     ///     Count::yes(6)?,
     ///     WidthHeight::yes(20, 20)?,
     ///     &Seed::no()
-    /// )
+    /// ).await
     /// .expect("Fetching failed");
     /// assert_eq!(hexbot_with_coordinates.has_coordinates(), true);
     ///
@@ -200,10 +212,11 @@ impl Hexbot {
     ///      Count::yes(6)?,
     ///      WidthHeight::no(),
     ///      &Seed::no()
-    /// )
+    /// ).await
     /// .expect("Fetching failed");
     /// assert_eq!(hexbot_without_coordinates.has_coordinates(), false);
     /// # Ok::<(), Box<dyn std::error::Error>>(())
+    /// # };
     /// ```
     pub fn has_coordinates(&self) -> bool {
         !(self.colors[0].coordinates == None)
@@ -215,11 +228,12 @@ impl Hexbot {
     ///
     /// ```no_run
     /// # use hexbot::*;
+    /// # async {
     /// let hb = Hexbot::fetch(
     ///     Count::yes(5)?,
     ///     WidthHeight::no(),
     ///     &Seed::no()
-    /// )
+    /// ).await
     /// .expect("Fetching failed");
     /// assert_eq!(hb.len(), 5);
     ///
@@ -227,10 +241,11 @@ impl Hexbot {
     ///     Count::no(),
     ///     WidthHeight::yes(500, 500)?,
     ///     &Seed::no()
-    /// )
+    /// ).await
     /// .expect("Fetching failed");
     /// assert_eq!(hb.len(), 1);
     /// # Ok::<(), Box<dyn std::error::Error>>(())
+    /// # };
     /// ```
     pub fn len(&self) -> usize {
         self.colors.len()
@@ -240,11 +255,12 @@ impl Hexbot {
     ///
     /// ```no_run
     /// # use hexbot::*;
+    /// # async {
     /// let hb = Hexbot::fetch(
     ///     Count::yes(5)?,
     ///     WidthHeight::no(),
     ///     &Seed::new(&[0x_00_AA_00])?
-    /// )
+    /// ).await
     /// .expect("Fetching failed");
     /// let dots = hb.into_inner();
     /// assert_eq!(
@@ -252,20 +268,23 @@ impl Hexbot {
     ///     vec![Dot { color: Color::from("#00AA00"), coordinates: None }; 5],
     /// );
     /// # Ok::<(), Box<dyn std::error::Error>>(())
+    /// # };
     /// ```
     ///
     /// ```compile_fail
     /// # use hexbot::*;
+    /// # async {
     /// let hb = Hexbot::fetch(
     ///     Count::yes(5)?,
     ///     WidthHeight::no(),
     ///     &Seed::new(&[0x_00_AA_00])?
-    /// )
+    /// ).await
     /// .expect("Fetching failed");
     /// let dots = hb.into_inner();
     /// println!("{}", hb);
     /// println!("{:?}", dots);
     /// # Ok::<(), Box<dyn std::error::Error>>(())
+    /// # };
     /// ```
     pub fn into_inner(self) -> Vec<Dot> {
         self.colors
@@ -275,17 +294,19 @@ impl Hexbot {
     ///
     /// ```no_run
     /// # use hexbot::*;
+    /// # async {
     /// let hexbot = Hexbot::fetch(
     ///     Count::yes(5)?,
     ///     WidthHeight::no(),
     ///     &Seed::new(&[0x_00_00_FF])?
-    /// )
+    /// ).await
     /// .expect("Fetching failed");
     /// assert_eq!(
     ///     hexbot.as_inner(),
     ///     &vec![Dot { color: Color::from("#0000FF"), coordinates: None }; 5],
     /// );
     /// # Ok::<(), Box<dyn std::error::Error>>(())
+    /// # };
     /// ```
     pub fn as_inner(&self) -> &Vec<Dot> {
         &self.colors

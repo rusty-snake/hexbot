@@ -1,5 +1,5 @@
 /*
- * Copyright © 2019 rusty-snake <print_hello_world+License@protonmail.com>
+ * Copyright © 2019,2020 rusty-snake <print_hello_world+License@protonmail.com>
  *
  * This file is part of rusty-snake's hexbot solution
  *
@@ -26,20 +26,22 @@ use std::fmt::{self, Write};
 ///
 /// ```no_run
 /// # use hexbot::*;
+/// # async {
 /// // Fetch a Hexbot with this seed: `00FFFF,0000FF,008B8B,00008B`.
 /// let hb = Hexbot::fetch(
 ///     Count::no(),
 ///     WidthHeight::no(),
 ///     &Seed::new(&[0x_00_FF_FF, 0x_00_00_FF, 0x_00_8B_8B, 0x_00_00_8B])?
-/// )?;
+/// ).await?;
 ///
 /// // Don't add the `seed` parameter to the request.
 /// let hb = Hexbot::fetch(
 ///     Count::no(),
 ///     WidthHeight::no(),
 ///     &Seed::no()
-/// )?;
+/// ).await?;
 /// # Ok::<(), Box<dyn std::error::Error>>(())
+/// # };
 /// ```
 ///
 /// [hexbot-API]: https://github.com/noops-challenge/hexbot/blob/master/API.md

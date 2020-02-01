@@ -1,5 +1,5 @@
 /*
- * Copyright © 2019 rusty-snake <print_hello_world+License@protonmail.com>
+ * Copyright © 2019,2020 rusty-snake <print_hello_world+License@protonmail.com>
  *
  * This file is part of rusty-snake's hexbot solution
  *
@@ -26,22 +26,24 @@ use std::{fmt, ops};
 ///
 /// ```no_run
 /// # use hexbot::*;
+/// # async {
 /// // Fetch a Hexbot with 500 colors.
 /// let hb = Hexbot::fetch(
 ///     Count::yes(500)?,
 ///     WidthHeight::no(),
 ///     &Seed::no()
-/// )?;
-/// # assert_eq!(hb.len(), 500);
+/// ).await?;
+/// assert_eq!(hb.len(), 500);
 ///
 /// // Don't add the `count` parameter to the request.
 /// let hb = Hexbot::fetch(
 ///     Count::no(),
 ///     WidthHeight::no(),
 ///     &Seed::no()
-/// )?;
-/// # assert_eq!(hb.len(), 1);
+/// ).await?;
+/// assert_eq!(hb.len(), 1);
 /// # Ok::<(), Box<dyn std::error::Error>>(())
+/// # };
 /// ```
 ///
 /// [hexbot-API]: https://github.com/noops-challenge/hexbot/blob/master/API.md

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2019 rusty-snake <print_hello_world+License@protonmail.com>
+ * Copyright © 2019,2020 rusty-snake <print_hello_world+License@protonmail.com>
  *
  * This file is part of rusty-snake's hexbot solution
  *
@@ -28,15 +28,17 @@ use std::{fmt, ops};
 ///
 /// ```no_run
 /// # use hexbot::*;
+/// # async {
 /// let hb = Hexbot::fetch(
 ///     Count::yes(3)?,
 ///     WidthHeight::min(),
 ///     &Seed::no()
-/// )
+/// ).await
 /// .expect("Fetching failed");
 /// let coordinates = hb.dot_at(1).unwrap().coordinates.unwrap();
 /// println!("You'll find the treasures at {}.", coordinates);
 /// # Ok::<(), Box<dyn std::error::Error>>(())
+/// # };
 /// ```
 ///
 /// ```

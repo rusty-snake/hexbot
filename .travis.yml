@@ -3,7 +3,7 @@ cache: cargo
 os: linux
 dist: bionic
 rust:
-  - 1.37.0
+  - 1.39.0
   - stable
   - beta
 install:

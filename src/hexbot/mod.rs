@@ -1,5 +1,5 @@
 /*
- * Copyright © 2019 rusty-snake <print_hello_world+License@protonmail.com>
+ * Copyright © 2019,2020 rusty-snake <print_hello_world+License@protonmail.com>
  *
  * This file is part of rusty-snake's hexbot solution
  *
@@ -18,7 +18,6 @@
  */
 
 pub mod coordinates;
-pub mod coordinateslimit;
 pub mod count;
 pub mod dot;
 pub mod errors;
@@ -26,4 +25,3 @@ pub mod errors;
 pub mod hexbot;
 pub mod seed;
 pub mod widthheight;
-pub mod withcoordinates;

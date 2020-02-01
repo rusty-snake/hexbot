@@ -1,5 +1,5 @@
 /*
- * Copyright © 2019 rusty-snake <print_hello_world+License@protonmail.com>
+ * Copyright © 2019,2020 rusty-snake <print_hello_world+License@protonmail.com>
  *
  * This file is part of rusty-snake's hexbot solution
  *
@@ -28,11 +28,12 @@ use tint::Color;
 ///
 /// ```no_run
 /// # use hexbot::*;
+/// # async {
 /// let hb1 = Hexbot::fetch(
 ///     Count::yes(5)?,
 ///     WidthHeight::no(),
 ///     &Seed::new(&[0x_B7_41_0E])?
-/// )
+/// ).await
 /// .expect("Fetching failed");
 /// let dot = hb1.dot_at(2).unwrap();
 /// assert_eq!(dot, &Dot { color: Color::from("#B7410E"), coordinates: None });
@@ -41,11 +42,12 @@ use tint::Color;
 ///     Count::yes(5)?,
 ///     WidthHeight::yes(2500, 4000)?,
 ///     &Seed::no()
-/// )
+/// ).await
 /// .expect("Fetching failed");
 /// let Dot { color, coordinates } = hb2.dot_at(4).unwrap();
 /// println!("color: {}, coordinates: {}", color, coordinates.unwrap());
 /// # Ok::<(), Box<dyn std::error::Error>>(())
+/// # };
 /// ```
 ///
 /// [API-doc]: https://github.com/noops-challenge/hexbot/blob/master/API.md
@@ -62,11 +64,12 @@ impl Dot {
     ///
     /// ```no_run
     /// # use hexbot::*;
+    /// # async {
     /// let hexbot_without_coordinates = Hexbot::fetch(
     ///     Count::no(),
     ///     WidthHeight::no(),
     ///     &Seed::no()
-    /// )
+    /// ).await
     /// .expect("Fetching failed");
     /// let dot_without_coordinates = hexbot_without_coordinates.dot_at(0).unwrap();
     /// assert_eq!(dot_without_coordinates.has_coordinates(), false);
@@ -75,11 +78,12 @@ impl Dot {
     ///     Count::no(),
     ///     WidthHeight::yes(20, 20)?,
     ///     &Seed::no()
-    /// )
+    /// ).await
     /// .expect("Fetching failed");
     /// let dot_with_coordinates = hexbot_with_coordinates.dot_at(0).unwrap();
     /// assert_eq!(dot_with_coordinates.has_coordinates(), true);
     /// # Ok::<(), Box<dyn std::error::Error>>(())
+    /// # };
     /// ```
     pub fn has_coordinates(&self) -> bool {
         !(self.coordinates == None)

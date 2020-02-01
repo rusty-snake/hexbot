@@ -1,5 +1,5 @@
 /*
- * Copyright © 2019 rusty-snake <print_hello_world+License@protonmail.com>
+ * Copyright © 2019,2020 rusty-snake <print_hello_world+License@protonmail.com>
  *
  * This file is part of rusty-snake's hexbot solution
  *
@@ -33,9 +33,9 @@ impl fmt::Display for CountOutOfRange {
     }
 }
 
-/// Error type from [`CoordinatesLimit::new()`].
+/// Error type from [`WidthHeight::yes()`].
 ///
-/// [`CoordinatesLimit::new()`]: ../struct.CoordinatesLimit.html#method.new
+/// [`WidthHeight::yes()`]: ../struct.WidthHeight.html#method.yes
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
 pub struct CoordinatesLimitOutOfRange;
 impl StdError for CoordinatesLimitOutOfRange {}

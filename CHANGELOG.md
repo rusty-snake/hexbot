@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.12] - 2020-02-01
+### Removed
+ * `WithCoordinates` and `CoordinatesLimit`
+
+### Changed
+ * make `Hexbot::fetch` async
+ * min rustc: 1.39.0
+
 ## [0.0.11] - 2019-10-13
 ### Added
  * `Seed::add`
@@ -109,6 +117,7 @@ maintenance release
  - Support for requesting, parsing and printing a hexbot request without parameters.
  - All stuff around a project like README, LICENSE, .gitignore, ...
 
+[0.0.12]: https://github.com/rusty-snake/hexbot/tree/v0.0.12
 [0.0.11]: https://github.com/rusty-snake/hexbot/tree/v0.0.11
 [0.0.10]: https://github.com/rusty-snake/hexbot/tree/v0.0.10
 [0.0.9]: https://github.com/rusty-snake/hexbot/tree/v0.0.9

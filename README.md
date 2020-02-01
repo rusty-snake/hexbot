@@ -1,8 +1,8 @@
-# :construction: :crab: Hexbot :crab: :construction: <br> [![top language: rust]][rust-lang] ![rust 2018] ![rustc 1.37+] [![GPLv3+]][COPYING] ![tag]
+# :construction: :crab: Hexbot :crab: :construction: <br> [![top language: rust]][rust-lang] ![rust 2018] ![rustc 1.39+] [![GPLv3+]][COPYING] ![tag]
 
 [top language: rust]: https://img.shields.io/github/languages/top/rusty-snake/hexbot.svg?logo=rust
 [rust-lang]: https://www.rust-lang.org/
-[rustc 1.37+]: https://img.shields.io/badge/rustc-1.37+-blue.svg?logo=rust
+[rustc 1.39+]: https://img.shields.io/badge/rustc-1.39+-blue.svg?logo=rust
 [rust 2018]: https://img.shields.io/badge/rust--edition-2018-blue.svg?logo=rust
 [GPLv3+]: https://img.shields.io/github/license/rusty-snake/hexbot.svg?color=darkred
 [COPYING]: COPYING
@@ -82,19 +82,21 @@ Using the hexbot library in your own project.
 `Cargo.toml`:
 ```toml
 [dependencies]
-hexbot = { git = "https://github.com/rusty-snake/hexbot", tag = "v0.0.11" }
+hexbot = { git = "https://github.com/rusty-snake/hexbot", tag = "v0.0.12" }
+futures = "0.3"
 ```
 
 `src/main.rs`:
 ```rust
 use hexbot::{Count, Hexbot, Seed, WidthHeight};
+use futures::executor::block_on;
 
 fn main() {
-    let hb = Hexbot::fetch(
+    let hb = block_on(Hexbot::fetch(
         Count::no(),
         WidthHeight::no(),
         &Seed::no()
-    );
+    )).expect("Fetching failed");
     println!("Hello from Hexbot: {}", hb);
 }
 ```
@@ -104,21 +106,15 @@ For the next steps, see the [documentation](#documentation).
 ## Changelog
 
 ```markdown
-## [0.0.11] - 2019-10-13
-### Added
- * `Seed::add`
- * impl ops::{Add,Sub} for Coordinates
- * `hexbot::WidthHeight` improved replacement for `WithCoordinates` and `CoordinatesLimit`
+## [0.0.12] - 2020-02-01
+### Removed
+ * `WithCoordinates` and `CoordinatesLimit`
 
 ### Changed
- * `Hexbot::fetch` accept both `WithCoordinates` and `WidthHeight`
- * old:`SeedError::NoColor` new:`SeedError::NoColor(i32)`
+ * make `Hexbot::fetch` async
+ * min rustc: 1.39.0
 
-### Deprecated
- * `WithCoordinates` use `WidthHeight`
- * `CoordinatesLimit` use `WidthHeight`
-
-[0.0.11]: https://github.com/rusty-snake/hexbot/tree/v0.0.11
+[0.0.12]: https://github.com/rusty-snake/hexbot/tree/v0.0.12
 ```
 
 For the full Changelog see [CHANGELOG.md](CHANGELOG.md).

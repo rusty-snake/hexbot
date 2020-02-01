@@ -1,5 +1,5 @@
 /*
- * Copyright © 2019 rusty-snake <print_hello_world+License@protonmail.com>
+ * Copyright © 2019,2020 rusty-snake <print_hello_world+License@protonmail.com>
  *
  * This file is part of rusty-snake's hexbot solution
  *
@@ -52,7 +52,8 @@ fn ask_i32(question: &str) -> io::Result<i32> {
     }
 }
 
-fn main() -> Result<(), Box<dyn std::error::Error>> {
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("===== Hexbot =====");
     let count = if ask_bool("Should the count parameter be added? [yes|no] ")? {
         loop {
@@ -78,7 +79,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         } else {
             WidthHeight::no()
         };
-    let hb = Hexbot::fetch(count, with_coordinates, &Seed::no()).expect("Fetching failed");
+    let hb = Hexbot::fetch(count, with_coordinates, &Seed::no()).await.expect("Fetching failed");
     println!("{}", hb);
     Ok(())
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2019 rusty-snake <print_hello_world+License@protonmail.com>
+ * Copyright © 2019,2020 rusty-snake <print_hello_world+License@protonmail.com>
  *
  * This file is part of rusty-snake's hexbot solution
  *
@@ -26,17 +26,19 @@ use std::{convert, fmt, ops};
 ///
 /// ```no_run
 /// # use hexbot::*;
+/// # async {
 /// let hb_with_coordinates = Hexbot::fetch(
 ///     Count::no(),
 ///     WidthHeight::yes(10_000, 2500)?,
 ///     &Seed::no()
-/// )?;
+/// ).await?;
 /// let hb_without_coordinates = Hexbot::fetch(
 ///     Count::no(),
 ///     WidthHeight::no(),
 ///     &Seed::no()
-/// )?;
+/// ).await?;
 /// # Ok::<(), Box<dyn std::error::Error>>(())
+/// # };
 /// ```
 ///
 /// ```
@@ -229,10 +231,5 @@ impl convert::TryFrom<Coordinates> for WidthHeight {
 
     fn try_from(coordinates: Coordinates) -> Result<Self, Self::Error> {
         Self::yes(coordinates.x, coordinates.y)
-    }
-}
-impl crate::__WidthHeight for WidthHeight {
-    fn get(&self) -> Option<Coordinates> {
-        *self.get()
     }
 }
