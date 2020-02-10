@@ -23,8 +23,8 @@
 
 use gdk::prelude::*;
 use gio::prelude::*;
-use glib::prelude::*;
 use gtk::prelude::*;
+use glib::prelude::*;
 
 use gio::ApplicationFlags;
 use gtk::{
@@ -32,7 +32,6 @@ use gtk::{
     SpinButton,
 };
 use hexbot::{Count, Hexbot, Seed, WidthHeight};
-use glib::clone;
 
 macro_rules! get_object {
     ($builder:ident, $name:literal) => {
@@ -45,54 +44,40 @@ macro_rules! get_object {
 const BUILDER_SRC: &str = include_str!("window.glade");
 //                                        TODO: ^^ filename
 
+struct Window {
+    window: ApplicationWindow,
+    input: InputWidgets,
+    output: Label,
+}
+
+struct InputWidgets {
+    count: InputWidget<SpinButton>,
+    width: InputWidget<SpinButton>,
+    height: InputWidget<SpinButton>,
+    seed: SeedInputWidget,
+    fetch_button: Button,
+}
+
+struct SeedInputWidget {
+    check_button: CheckButton,
+    grid: Grid,
+    color_buttons: [InputWidget<ColorButton>; 10],
+}
+
+struct InputWidget<T> {
+    check_button: CheckButton,
+    input_widget: T,
+}
+
 fn build_ui(app: &Application) {
     let builder = Builder::new_from_string(BUILDER_SRC);
-
-    let window: gtk::Window = get_object!(builder, "window");
-
-    // count
-    {
-        let spin_button: gtk::SpinButton = get_object!(builder, "count_SpinButton");
-        let check_button: gtk::CheckButton = get_object!(builder, "count_CheckButton");
-
-        check_button.connect_toggled(move |button| {
-            if button.get_active() {
-                spin_button.set_sensitive(true);
-            } else {
-                spin_button.set_sensitive(false);
-            }
-        });
-    }
-
-    // width
-    {
-        let width_spin_button: gtk::SpinButton = get_object!(builder, "width_SpinButton");
-        let heigth_spin_button: gtk::SpinButton = get_object!(builder, "heigth_SpinButton");
-        let heigth_check_button: gtk::CheckButton = get_object!(builder, "heigth_CheckButton");
-        let width_check_button: gtk::CheckButton = get_object!(builder, "width_CheckButton");
-
-        width_check_button.connect_toggled(clone!(@strong heigth_check_button => move |button| {
-            if button.get_active() {
-                width_spin_button.set_sensitive(true);
-                heigth_check_button.set_active(true);
-            } else {
-                width_spin_button.set_sensitive(false);
-                heigth_check_button.set_active(false);
-            }
-        }));
-
-        heigth_check_button.connect_toggled(move |button| {
-            if button.get_active() {
-                heigth_spin_button.set_sensitive(true);
-                width_check_button.set_active(true);
-            } else {
-                heigth_spin_button.set_sensitive(false);
-                width_check_button.set_active(false);
-            }
-        });
-    }
-
-    /*
+    let main_window = Window {
+        window: get_object!(builder, "window"),
+        input: InputWidgets {
+            count: InputWidget {
+                check_button: get_object!(builder, "count_CheckButton"),
+                input_widget: get_object!(builder, "count_SpinButton"),
+            },
             width: InputWidget {
                 check_button: get_object!(builder, "width_CheckButton"),
                 input_widget: get_object!(builder, "width_SpinButton"),
@@ -151,10 +136,60 @@ fn build_ui(app: &Application) {
         },
         output: get_object!(builder, "response_Label"),
     };
-    */
 
-    /*
+    // count
+    {
+        let spin_button = main_window.input.count.input_widget.clone();
+        main_window
+            .input
+            .count
+            .check_button
+            .connect_toggled(move |button| {
+                if button.get_active() {
+                    spin_button.set_sensitive(true);
+                } else {
+                    spin_button.set_sensitive(false);
+                }
+            });
+    }
 
+    // width
+    {
+        let spin_button = main_window.input.width.input_widget.clone();
+        let height_check_button = main_window.input.height.check_button.clone();
+        main_window
+            .input
+            .width
+            .check_button
+            .connect_toggled(move |button| {
+                if button.get_active() {
+                    spin_button.set_sensitive(true);
+                    height_check_button.set_active(true);
+                } else {
+                    spin_button.set_sensitive(false);
+                    height_check_button.set_active(false);
+                }
+            });
+    }
+
+    // height
+    {
+        let spin_button = main_window.input.height.input_widget.clone();
+        let width_check_button = main_window.input.width.check_button.clone();
+        main_window
+            .input
+            .height
+            .check_button
+            .connect_toggled(move |button| {
+                if button.get_active() {
+                    spin_button.set_sensitive(true);
+                    width_check_button.set_active(true);
+                } else {
+                    spin_button.set_sensitive(false);
+                    width_check_button.set_active(false);
+                }
+            });
+    }
 
     // seed
     {
@@ -218,18 +253,11 @@ fn build_ui(app: &Application) {
             output_label.set_text(&hb.to_string());
         });
     }
-    */
 
-    /*
     main_window.window.set_application(Some(app));
     main_window.window.show_all();
-    */
-
-    window.set_application(Some(app));
-    window.show_all();
 }
 
-/*
 fn get_seed_colors(color_buttons: [InputWidget<ColorButton>; 10]) -> Vec<i32> {
     let mut vec = Vec::with_capacity(10);
     for color_button in &color_buttons {
@@ -245,11 +273,10 @@ fn get_seed_colors(color_buttons: [InputWidget<ColorButton>; 10]) -> Vec<i32> {
 
     // color_bottons[0].input_widget.get_color().red as i32
 }
-*/
 
 fn main() {
     let application =
-        Application::new(None, Default::default()).expect("Application::new failed");
+        Application::new(None, ApplicationFlags::FLAGS_NONE).expect("Application::new failed");
 
     application.connect_activate(build_ui);
 

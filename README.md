@@ -125,4 +125,6 @@ For the full Changelog see [CHANGELOG.md](CHANGELOG.md).
 
 ## License
 
+![](https://www.gnu.org/graphics/gplv3-127x51.png)
+
 [GPL-3.0-or-later](COPYING)
