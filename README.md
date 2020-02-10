@@ -1,4 +1,4 @@
-# :construction: :crab: Hexbot :crab: :construction: <br> [![top language: rust]][rust-lang] ![rust 2018] ![rustc 1.39+] [![GPLv3+]][COPYING] ![tag]
+# :crab: Hexbot :crab: <br> [![top language: rust]][rust-lang] ![rust 2018] ![rustc 1.39+] [![GPLv3+]][COPYING] ![tag]
 
 [top language: rust]: https://img.shields.io/github/languages/top/rusty-snake/hexbot.svg?logo=rust
 [rust-lang]: https://www.rust-lang.org/
@@ -10,7 +10,7 @@
 
 [![Travis CI Status](https://badgen.net/travis/rusty-snake/hexbot/master?icon=travis&label=build)](https://travis-ci.com/rusty-snake/hexbot)
 [![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=rusty-snake/hexbot)](https://dependabot.com)
-![actively developed](https://badgen.net/badge/maintenance/actively-developed/green)
+![actively developed](https://badgen.net/badge/maintenance/passively-maintained/6B8E23)
 
 My solution for: https://noopschallenge.com/challenges/hexbot
 
